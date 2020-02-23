@@ -10,15 +10,17 @@
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity"
             android:theme="@style/NoAppBarTheme">
+
+        </activity>
+        <activity
+            android:name=".SignUpIntroActivity"
+            android:theme="@style/NoAppBarTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".SignUpIntroActivity"
-            android:theme="@style/NoAppBarTheme">
 
         </activity>
         <activity android:name=".SplashActivity"></activity>

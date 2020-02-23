@@ -3,4 +3,7 @@
 
     <string name="sign_up">You don\'t have a account? Sign Up</string>
 
+    <string name="introSignUp_to_Login_transition_loginButton">Button</string>
+    <string name="introSignUp_to_Login_transition_backButton">image</string>
+
 </resources>
