@@ -19,8 +19,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pets.account.LoginActivity;
+import com.example.pets.account.SignUpActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -31,6 +33,7 @@ public class SplashActivity extends AppCompatActivity {
     LinearLayout submitActionContainer;
 
     Intent logInIntent;
+    Intent signUpIntent;
 
 
 
@@ -51,8 +54,68 @@ public class SplashActivity extends AppCompatActivity {
         logInIntroText = findViewById(R.id.splashActivity_introText_textView);
         submitActionContainer = findViewById(R.id.splashActivity_bottomActions_linearLayout);
 
-        //handling animations
+        //setting up intents
+        logInIntent = new Intent(SplashActivity.this, LoginActivity.class);
+        signUpIntent = new Intent(SplashActivity.this, SignUpActivity.class);
 
+        //handling animations
+        handleAnim();
+
+        //setting the onClickListeners
+
+        submitActionContainer.getChildAt(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //calling @sentLoginIntent
+                sentLoginIntent();
+            }
+        });
+
+        submitActionContainer.getChildAt(1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sentSignUpIntent();
+            }
+        });
+
+
+
+    }
+
+    void animateBackgroundColor(int colorFrom, int colorTo){
+        ObjectAnimator.ofObject(root, "backgroundColor",
+                new ArgbEvaluator(),
+                colorFrom, colorTo)
+                .setDuration(2500)
+                .start();
+    }
+
+    void sentSignUpIntent(){
+        Pair[] pairs = new Pair[3];
+        //getResources().getString(R.string.introSignUp_to_Login_transition_backButton)
+
+        pairs[0] = new Pair(submitActionContainer.getChildAt(0), getResources().getString(R.string.introSignUp_to_Login_transition_loginButton));
+        pairs[1] = new Pair(appLogo, getResources().getString(R.string.introSignUp_to_Login_transition_backButton));
+        pairs[2] = new Pair(logInIntroText, getResources().getString(R.string.login_to_signUp_infoText));
+
+        final ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this, pairs);
+        startActivity(signUpIntent, options.toBundle());
+    }
+
+    void sentLoginIntent(){
+        //creating options for shared transition
+        Pair[] pairs = new Pair[3];
+        //getResources().getString(R.string.introSignUp_to_Login_transition_backButton)
+
+        pairs[0] = new Pair(submitActionContainer.getChildAt(0), getResources().getString(R.string.introSignUp_to_Login_transition_loginButton));
+        pairs[1] = new Pair(appLogo, getResources().getString(R.string.introSignUp_to_Login_transition_backButton));
+        pairs[2] = new Pair(logInIntroText, getResources().getString(R.string.login_to_signUp_infoText));
+
+        final ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this, pairs);
+        startActivity(logInIntent, options.toBundle());
+    }
+
+    void handleAnim(){
         //animating the background color change from light to dark
         animateBackgroundColor(Color.WHITE, getResources().getColor(R.color.accounts_dark_background));
 
@@ -105,41 +168,5 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
-        //setting up intents
-        logInIntent = new Intent(SplashActivity.this, LoginActivity.class);
-
-        //setting the onClickListeners
-
-
-        submitActionContainer.getChildAt(0).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //calling @sentLoginIntent
-                sentLoginIntent();
-            }
-        });
-
-
-
-    }
-
-    void animateBackgroundColor(int colorFrom, int colorTo){
-        ObjectAnimator.ofObject(root, "backgroundColor",
-                new ArgbEvaluator(),
-                colorFrom, colorTo)
-                .setDuration(2500)
-                .start();
-    }
-
-    void sentLoginIntent(){
-        //creating options for shared transition
-        Pair[] pairs = new Pair[2];
-        //getResources().getString(R.string.introSignUp_to_Login_transition_backButton)
-
-        pairs[0] = new Pair<>(submitActionContainer.getChildAt(0), getResources().getString(R.string.introSignUp_to_Login_transition_loginButton));
-        pairs[1] = new Pair<>(appLogo, getResources().getString(R.string.introSignUp_to_Login_transition_backButton));
-
-        final ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this, pairs);
-        startActivity(logInIntent, options.toBundle());
     }
 }

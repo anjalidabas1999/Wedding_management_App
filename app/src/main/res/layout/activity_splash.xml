@@ -28,7 +28,8 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="26dp"
         android:textStyle="bold"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:transitionName="@string/login_to_signUp_infoText"/>
 
     <LinearLayout
         android:id="@+id/splashActivity_bottomActions_linearLayout"
