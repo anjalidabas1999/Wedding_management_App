@@ -132,7 +132,8 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_person_outline_white"
             style="@style/accounts_signUp_editText_input_text_theme"
-            android:transitionName="@string/login_to_signUp_userName_editText"/>
+            android:transitionName="@string/login_to_signUp_userName_editText"
+            android:inputType="text"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -155,7 +156,8 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_mail"
             style="@style/accounts_signUp_editText_input_text_theme"
-            android:transitionName="@string/login_to_signUp_password_editText"/>
+            android:transitionName="@string/login_to_signUp_password_editText"
+            android:inputType="textEmailAddress"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

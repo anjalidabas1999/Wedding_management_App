@@ -44,7 +44,8 @@
         android:drawableLeft="@drawable/ic_person_outline_white"
         android:hint="Username"
         style="@style/accounts_login_input_text_theme"
-        android:transitionName="@string/login_to_signUp_userName_editText"/>
+        android:transitionName="@string/login_to_signUp_userName_editText"
+        android:inputType="textEmailAddress"/>
 
     <EditText
         android:id="@+id/loginActivity_password_editText"
@@ -56,7 +57,8 @@
         android:drawableLeft="@drawable/ic_lock_outline_white"
         android:hint="Password"
         style="@style/accounts_login_input_text_theme"
-        android:transitionName="@string/login_to_signUp_password_editText"/>
+        android:transitionName="@string/login_to_signUp_password_editText"
+        android:inputType="textPassword"/>
 
     <LinearLayout
         android:layout_width="match_parent"
