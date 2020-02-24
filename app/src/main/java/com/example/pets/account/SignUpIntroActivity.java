@@ -35,7 +35,7 @@ public class SignUpIntroActivity extends AppCompatActivity {
         //getting views from their ids
         loginButton= findViewById(R.id.login_intro_loginButton);
         petIcon= findViewById(R.id.pet_icon_imageView);
-        bottomSignUpTextView = findViewById(R.id.bottomTextView);
+        bottomSignUpTextView = findViewById(R.id.bottomSignUpTextView);
 
         //setting up intents
         logInIntent = new Intent(SignUpIntroActivity.this, LoginActivity.class);
