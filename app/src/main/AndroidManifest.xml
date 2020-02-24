@@ -15,18 +15,22 @@
         <activity
             android:name=".account.LoginActivity"
             android:theme="@style/NoAppBarTheme_LoginScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".account.SignUpIntroActivity"
             android:theme="@style/NoAppBarTheme_IntroScreen">
 
         </activity>
-        <activity android:name=".SplashActivity" />
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/NoAppBarTheme_IntroScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".HomeActivity" />
     </application>
 

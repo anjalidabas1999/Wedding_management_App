@@ -4,13 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity">
+    tools:context=".SplashActivity"
+    android:id="@+id/root">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/splashActivity_appLogo_imageView"
+        android:layout_width="78dp"
+        android:layout_height="78dp"
         android:src="@mipmap/ic_launcher"
         android:layout_centerInParent="true"
-        />
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="72dp"
+        android:text="Made with love"
+        android:fontFamily="sans-serif-thin"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/white"/>
 
 </RelativeLayout>
