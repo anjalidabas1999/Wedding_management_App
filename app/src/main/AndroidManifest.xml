@@ -8,22 +8,20 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity"
-            android:theme="@style/NoAppBarTheme_LoginScreen">
-
-        </activity>
+        <activity android:name=".account.SignUpActivity"></activity>
         <activity
-            android:name=".SignUpIntroActivity"
+            android:name=".account.LoginActivity"
+            android:theme="@style/NoAppBarTheme_LoginScreen"></activity>
+        <activity
+            android:name=".account.SignUpIntroActivity"
             android:theme="@style/NoAppBarTheme_IntroScreen">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".SplashActivity"></activity>
+        <activity android:name=".SplashActivity" />
         <activity android:name=".HomeActivity" />
     </application>
 

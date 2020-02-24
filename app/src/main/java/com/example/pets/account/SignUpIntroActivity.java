@@ -1,8 +1,7 @@
-package com.example.pets;
+package com.example.pets.account;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.pets.R;
 
 public class SignUpIntroActivity extends AppCompatActivity {
 
@@ -58,6 +59,7 @@ public class SignUpIntroActivity extends AppCompatActivity {
             }
         });
 
+        //Todo: Create signup activity and send intent
         bottomSignUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
