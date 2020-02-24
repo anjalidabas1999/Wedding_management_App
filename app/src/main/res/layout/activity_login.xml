@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".account.LoginActivity"
-    android:background="#333847">
+    android:background="@color/accounts_dark_background">
 
     <ImageView
-        android:id="@+id/backButton_imageView"
+        android:id="@+id/loginActivity_backButton_imageView"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="66dp"
@@ -19,7 +19,7 @@
         android:transitionName="@string/introSignUp_to_Login_transition_backButton"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/loginActivity_logIn_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -31,38 +31,29 @@
         android:textSize="32dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButton_imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/loginActivity_backButton_imageView" />
 
     <EditText
-        android:id="@+id/login_username_editText"
+        android:id="@+id/loginActivity_userEmail_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/LoginStartMargin"
         android:layout_marginTop="@dimen/LoginStartMargin"
-        android:layout_marginEnd="@dimen/LoginStartMargin"
-        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintTop_toBottomOf="@id/loginActivity_logIn_textView"
         app:layout_constraintStart_toStartOf="parent"
         android:drawableLeft="@drawable/ic_person_outline_white"
         android:hint="Username"
-        android:textColorHint="@color/colorAccentLight"
-        android:drawablePadding="16dp"
-        android:paddingBottom="16dp"
-        />
+        style="@style/accounts_login_input_text_theme"/>
 
     <EditText
-        android:id="@+id/login_password_editText"
+        android:id="@+id/loginActivity_password_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/LoginStartMargin"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="@dimen/LoginStartMargin"
-        app:layout_constraintTop_toBottomOf="@id/login_username_editText"
+        app:layout_constraintTop_toBottomOf="@id/loginActivity_userEmail_editText"
         app:layout_constraintStart_toStartOf="parent"
         android:drawableLeft="@drawable/ic_lock_outline_white"
         android:hint="Password"
-        android:drawablePadding="16dp"
-        android:paddingBottom="16dp"
-        android:textColorHint="@color/colorAccentLight"/>
+        style="@style/accounts_login_input_text_theme"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -77,19 +68,16 @@
 
 
         <Button
-            android:id="@+id/login_button"
+            android:id="@+id/loginActivity_loginButton_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:background="@drawable/rounded_button_background_dark"
             android:elevation="12dp"
             android:text="Log In"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:transitionName="@string/introSignUp_to_Login_transition_loginButton"/>
+            android:transitionName="@string/introSignUp_to_Login_transition_loginButton"
+            style="@style/accounts_login_signUp_button_theme"/>
 
         <TextView
-            android:id="@+id/bottomTextView"
+            android:id="@+id/loginActivity_signUpButton_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="New user? SignUp"

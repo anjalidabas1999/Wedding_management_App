@@ -28,6 +28,45 @@
 
     </style>
 
+    <style name="accounts_login_input_text_theme" parent="Widget.AppCompat.EditText">
+        <item name="android:textColorHint">@color/colorAccentLight</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginEnd">@dimen/LoginStartMargin</item>
+        <item name="android:layout_marginStart">@dimen/LoginStartMargin</item>
+
+    </style>
+
+    <style name="accounts_signUp_input_text_theme" parent="Widget.Design.TextInputLayout">
+        <item name="android:textColorHint">@color/colorAccentLight</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginEnd">@dimen/LoginStartMargin</item>
+        <item name="android:layout_marginStart">@dimen/LoginStartMargin</item>
+
+    </style>
+
+    <style name="accounts_signUp_editText_input_text_theme" parent="Widget.AppCompat.EditText">
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="accounts_login_signUp_button_theme" parent="Widget.AppCompat.Button">
+        <item name="android:elevation">12dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:layout_marginBottom">22dp</item>
+        <item name="android:background">@drawable/rounded_button_background_dark</item>
+    </style>
+
+
+
 
 
 </resources>

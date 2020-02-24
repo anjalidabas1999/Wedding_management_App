@@ -8,4 +8,6 @@
     <color name="black">#000</color>
 
     <color name="colorAccentLight">#90FBAB19</color>
+
+    <color name="accounts_dark_background">#333847</color>
 </resources>
