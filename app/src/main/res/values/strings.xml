@@ -5,5 +5,9 @@
 
     <string name="introSignUp_to_Login_transition_loginButton">Button</string>
     <string name="introSignUp_to_Login_transition_backButton">image</string>
+    <string name="login_to_signUp_infoText">infoText</string>
+    <string name="login_to_signUp_userName_editText">userName</string>
+    <string name="login_to_signUp_password_editText">password</string>
+
 
 </resources>
