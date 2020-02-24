@@ -9,12 +9,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity"
-            android:theme="@style/NoAppBarTheme">
+            android:theme="@style/NoAppBarTheme_LoginScreen">
 
         </activity>
         <activity
             android:name=".SignUpIntroActivity"
-            android:theme="@style/NoAppBarTheme">
+            android:theme="@style/NoAppBarTheme_IntroScreen">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
