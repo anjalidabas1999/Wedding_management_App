@@ -18,11 +18,6 @@
 
         </activity>
         <activity
-            android:name=".account.SignUpIntroActivity"
-            android:theme="@style/NoAppBarTheme_IntroScreen">
-
-        </activity>
-        <activity
             android:name=".SplashActivity"
             android:theme="@style/NoAppBarTheme_IntroScreen">
             <intent-filter>

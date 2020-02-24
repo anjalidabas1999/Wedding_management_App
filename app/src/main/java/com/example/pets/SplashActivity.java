@@ -4,20 +4,35 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.util.Pair;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.example.pets.account.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
     ImageView appLogo;
     RelativeLayout root;
+
+    TextView logInIntroText;
+    LinearLayout submitActionContainer;
+
+    Intent logInIntent;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,32 +46,100 @@ public class SplashActivity extends AppCompatActivity {
 
     private void setup() {
         //getting views by their ids
-        appLogo = findViewById(R.id.splashActivity_appLogo_imageView);
+        appLogo = findViewById(R.id.splashActivity_appIcon_ImageView);
         root = findViewById(R.id.root);
+        logInIntroText = findViewById(R.id.splashActivity_introText_textView);
+        submitActionContainer = findViewById(R.id.splashActivity_bottomActions_linearLayout);
 
         //handling animations
 
-        //changing background of root from one color to another
-        ObjectAnimator.ofObject(root, "backgroundColor",
-                new ArgbEvaluator(),
-                Color.WHITE, getResources().getColor(R.color.accounts_dark_background))
-                .setDuration(5000)
-                .start();
+        //animating the background color change from light to dark
+        animateBackgroundColor(Color.WHITE, getResources().getColor(R.color.accounts_dark_background));
 
         //loading animation from anim directory and passing it in imageView setAnimation method
-        appLogo.setAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+        appLogo.setAnimation(AnimationUtils.loadAnimation(this, R.anim.focus_zoom));
         appLogo.animate();
 
-        //calling the intent after 5000 seconds
-        (new Handler()).postDelayed(new Runnable() {
+        //adding listener to the animation on appLogo
+        appLogo.getAnimation().setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void run() {
-                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-                finish();
+            public void onAnimationStart(Animation animation) {
+
             }
-        }, 6000);
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                /*ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this, appLogo, "Image");
+                startActivity(new Intent(SplashActivity.this, SignUpIntroActivity.class), options.toBundle());*/
+
+                //getting location matrix of device
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+                int y = metrics.heightPixels / 2 - appLogo.getHeight() - 102;
+                int x = metrics.widthPixels / 2 - appLogo.getWidth() - 22;
+
+                //creating translate animation fro appLogo moving from center to top corner
+                TranslateAnimation anim = new TranslateAnimation(0, -x, 0, -y);
+
+                anim.setInterpolator((new AccelerateDecelerateInterpolator()));
+                anim.setDuration(1000);
+                anim.setFillAfter(true);
+                appLogo.setAnimation(anim);
+                appLogo.startAnimation(anim);
+
+                //adding fade_in animation to the intro text and bottom linear layout
+                logInIntroText.setAnimation(AnimationUtils.loadAnimation(SplashActivity.this, R.anim.fade_in));
+                submitActionContainer.setAnimation(AnimationUtils.loadAnimation(SplashActivity.this, R.anim.fade_in));
+
+                //making the rest of the views visible on screen
+                logInIntroText.setVisibility(View.VISIBLE);
+                submitActionContainer.setVisibility(View.VISIBLE);
+
+                //animating the background color change from dark to light
+                animateBackgroundColor(getResources().getColor(R.color.accounts_dark_background), Color.WHITE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        //setting up intents
+        logInIntent = new Intent(SplashActivity.this, LoginActivity.class);
+
+        //setting the onClickListeners
+
+
+        submitActionContainer.getChildAt(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //calling @sentLoginIntent
+                sentLoginIntent();
+            }
+        });
 
 
 
+    }
+
+    void animateBackgroundColor(int colorFrom, int colorTo){
+        ObjectAnimator.ofObject(root, "backgroundColor",
+                new ArgbEvaluator(),
+                colorFrom, colorTo)
+                .setDuration(2500)
+                .start();
+    }
+
+    void sentLoginIntent(){
+        //creating options for shared transition
+        Pair[] pairs = new Pair[2];
+        //getResources().getString(R.string.introSignUp_to_Login_transition_backButton)
+
+        pairs[0] = new Pair<>(submitActionContainer.getChildAt(0), getResources().getString(R.string.introSignUp_to_Login_transition_loginButton));
+        pairs[1] = new Pair<>(appLogo, getResources().getString(R.string.introSignUp_to_Login_transition_backButton));
+
+        final ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this, pairs);
+        startActivity(logInIntent, options.toBundle());
     }
 }
