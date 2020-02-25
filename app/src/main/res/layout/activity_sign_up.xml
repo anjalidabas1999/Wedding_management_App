@@ -8,7 +8,7 @@
     android:background="@color/accounts_dark_background">
 
     <ImageView
-        android:id="@+id/loginActivity_backButton_imageView"
+        android:id="@+id/signUpActivity_backButton_imageView"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="66dp"
@@ -19,7 +19,7 @@
         android:transitionName="@string/introSignUp_to_Login_transition_backButton"/>
 
     <TextView
-        android:id="@+id/splashActivity_introText_textVIew"
+        android:id="@+id/signUpActivity_introText_textVIew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -31,14 +31,14 @@
         android:textSize="32dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginActivity_backButton_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/signUpActivity_backButton_imageView"
         android:transitionName="@string/login_to_signUp_infoText"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="42dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginActivity_backButton_imageView"
+        app:layout_constraintTop_toBottomOf="@id/signUpActivity_backButton_imageView"
         android:layout_marginTop="42dp"
         android:layout_marginRight="32dp">
 
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/LoginStartMargin"
         android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/splashActivity_introText_textVIew"
+        app:layout_constraintTop_toBottomOf="@id/signUpActivity_introText_textVIew"
         app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/ic_unlink"
         android:backgroundTint="#00C7CB"/>
@@ -105,7 +105,7 @@
         android:id="@+id/signUpActivity_picUploadText_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/splashActivity_introText_textVIew"
+        app:layout_constraintTop_toBottomOf="@id/signUpActivity_introText_textVIew"
         app:layout_constraintStart_toEndOf="@id/signUpActivity_addProfileImage_fab"
         android:layout_marginTop="44dp"
         android:layout_marginLeft="32dp"
@@ -117,7 +117,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/loginActivity_userEmail_editText"
+        android:id="@+id/signUpActivity_name_textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -138,17 +138,15 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/loginActivity_password_editText"
+        android:id="@+id/signUpActivity_userName_textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/loginActivity_userEmail_editText"
+        app:layout_constraintTop_toBottomOf="@id/signUpActivity_name_textInputLayout"
         app:layout_constraintStart_toStartOf="parent"
         android:drawableLeft="@drawable/ic_lock_outline_white"
         android:hint="Username/Email"
         style="@style/accounts_signUp_input_text_theme"
-
-        app:counterEnabled="true"
-        app:counterMaxLength="12">
+        >
 
         <EditText
             android:id="@+id/signUpActivity_userEmail_editText"
@@ -174,7 +172,7 @@
 
 
         <Button
-            android:id="@+id/signUp_button"
+            android:id="@+id/signUpActivity_signUp_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Next"

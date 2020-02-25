@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pets.R;
-import com.example.pets.SplashActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -38,12 +37,12 @@ public class LoginActivity extends AppCompatActivity {
 
     void setUp() {
         //getting views by their ids
-        backButton = findViewById(R.id.loginActivity_backButton_imageView);
+        backButton = findViewById(R.id.signUpActivity_backButton_imageView);
         signUpTextView = findViewById(R.id.loginActivity_signUpButton_textView);
         logInButton = findViewById(R.id.loginActivity_loginButton_button);
         infoTextView = findViewById(R.id.loginActivity_introText_textView);
-        passwordEditTextView = findViewById(R.id.loginActivity_password_editText);
-        userNameEditTextView = findViewById(R.id.loginActivity_userEmail_editText);
+        passwordEditTextView = findViewById(R.id.signUpActivity_userName_textInputLayout);
+        userNameEditTextView = findViewById(R.id.signUpActivity_name_textInputLayout);
 
         //setting on click
         backButton.setOnClickListener(new View.OnClickListener() {
