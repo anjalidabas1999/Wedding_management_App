@@ -184,12 +184,14 @@
             style="@style/accounts_login_signUp_button_theme" />
 
         <TextView
-            android:id="@+id/loginActivity_signUpButton_textView"
+            android:id="@+id/loginActivity_signUpButtonInfo_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New user? SignUp"
+            android:text="Long press for SignUp"
             android:textColor="@color/white"
             android:gravity="center"
+            android:visibility="invisible"
+            android:textStyle="bold"
             android:transitionName="submitButton"/>
 
 
