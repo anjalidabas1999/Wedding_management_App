@@ -11,7 +11,7 @@
     <style name="NoAppBarTheme_IntroScreen" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-      1  <item name="colorPrimaryDark">#31000000</item>
+        <item name="colorPrimaryDark">#31000000</item>
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:windowActivityTransitions">true</item>

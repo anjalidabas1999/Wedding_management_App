@@ -1,10 +1,13 @@
 package com.example.pets.account;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.core.view.MotionEventCompat;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,11 +60,7 @@ public class SignUpActivity extends AppCompatActivity {
         nameAndPasswordEditText = nameTextInputLayout.getEditText();
         userEmailAndConfirmPasswordEditText = userNameTextInputLayout.getEditText();
 
-
-
-
-
-
+        
         //adding on click listeners
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +68,8 @@ public class SignUpActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity {
         userNameTextInputLayout.setCounterMaxLength(12);
 
         nameTextInputLayout.setHint("Password");
-        userNameTextInputLayout.setHint("Confrim Password");
+        userNameTextInputLayout.setHint("Confirm Password");
 
         nameAndPasswordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         userEmailAndConfirmPasswordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
