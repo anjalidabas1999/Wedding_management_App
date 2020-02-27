@@ -14,6 +14,9 @@
         <item name="colorPrimaryDark">#31000000</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowContentTransitions">true</item>
 

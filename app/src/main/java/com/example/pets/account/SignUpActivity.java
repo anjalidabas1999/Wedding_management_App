@@ -1,5 +1,6 @@
 package com.example.pets.account;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,12 +17,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pets.HomeActivity;
 import com.example.pets.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
@@ -33,6 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     Button signUpButton;
 
+    ProgressBar progressBar;
 
     FloatingActionButton profileImageFab;
 
@@ -52,6 +60,8 @@ public class SignUpActivity extends AppCompatActivity {
     String mPassword="";
     String mConfirmPassword="";
 
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +80,13 @@ public class SignUpActivity extends AppCompatActivity {
         profileImageFab = findViewById(R.id.signUpActivity_addProfileImage_fab);
         signUpButtonInfo = findViewById(R.id.loginActivity_signUpButtonInfo_textView);
 
+        progressBar = new ProgressBar(this);
+
         nameAndPasswordEditText = nameTextInputLayout.getEditText();
         userEmailAndConfirmPasswordEditText = userNameTextInputLayout.getEditText();
+
+        //getting instance of firebase object
+        mAuth = FirebaseAuth.getInstance();
 
 
         //adding on click listeners
@@ -88,6 +103,7 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fetchDataFromCurrentState();
                 currentPage = currentPage==1 ? 2:1;
                 updateCurrentPage();
 
@@ -108,6 +124,9 @@ public class SignUpActivity extends AppCompatActivity {
         profileImageFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Log.d("tag", mName+"______"+mUserName+"_________"+mPassword+"________"+mConfirmPassword);
+
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -159,7 +178,6 @@ public class SignUpActivity extends AppCompatActivity {
     void setPage1(){
 
         //getting previous text from name and email and storing in a var
-        fetchDataFromCurrentState();
 
         Log.d("DATA", "Data from page2 " + mPassword + "_______" +mConfirmPassword);
 
@@ -195,7 +213,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     void setPage2(){
         //getting previous text from name and email and storing in a var
-        fetchDataFromCurrentState();
 
 
         Log.d("DATA", "Data from page1 " + mName + "_______" +mUserName);
@@ -235,7 +252,30 @@ public class SignUpActivity extends AppCompatActivity {
         if(!(mPassword.equals(mConfirmPassword) ? true:false)){
             nameAndPasswordEditText.requestFocus(1);
             userEmailAndConfirmPasswordEditText.requestFocus();
+
+        }else{
             toast("pass");
+
+            progressBar.setIndeterminate(true);
+
+            mAuth.createUserWithEmailAndPassword(mUserName, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        toast("SignUp successfull: "+task.getResult().getUser().getEmail());
+                        startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                    }
+
+                }
+            });
+
+
+            mAuth.signInWithEmailAndPassword(mUserName, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                }
+            });
         }
     }
 
@@ -248,7 +288,6 @@ public class SignUpActivity extends AppCompatActivity {
             mConfirmPassword = userEmailAndConfirmPasswordEditText.getText().toString();
         }
     }
-
 
     void toast(String message){
         Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();

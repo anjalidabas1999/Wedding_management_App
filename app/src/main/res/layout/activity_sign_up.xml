@@ -18,6 +18,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:transitionName="@string/introSignUp_to_Login_transition_backButton"/>
 
+
+
     <TextView
         android:id="@+id/signUpActivity_introText_textVIew"
         android:layout_width="wrap_content"
@@ -159,7 +161,7 @@
             android:drawableLeft="@drawable/ic_mail"
             style="@style/accounts_signUp_editText_input_text_theme"
             android:transitionName="@string/login_to_signUp_password_editText"
-            android:inputType="textPassword"/>
+            android:inputType="textEmailAddress"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
