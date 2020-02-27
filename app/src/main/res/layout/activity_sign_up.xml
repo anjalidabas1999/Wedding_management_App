@@ -159,7 +159,7 @@
             android:drawableLeft="@drawable/ic_mail"
             style="@style/accounts_signUp_editText_input_text_theme"
             android:transitionName="@string/login_to_signUp_password_editText"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textPassword"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

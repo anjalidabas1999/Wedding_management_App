@@ -47,10 +47,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     int currentPage = 1;
 
-    String mName;
-    String mUserName;
-    String mPassword;
-    String mConfirmPassword;
+    String mName="";
+    String mUserName="";
+    String mPassword="";
+    String mConfirmPassword="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,8 +159,7 @@ public class SignUpActivity extends AppCompatActivity {
     void setPage1(){
 
         //getting previous text from name and email and storing in a var
-        mPassword = nameAndPasswordEditText.getText().toString();
-        mConfirmPassword = userEmailAndConfirmPasswordEditText.getText().toString();
+        fetchDataFromCurrentState();
 
         Log.d("DATA", "Data from page2 " + mPassword + "_______" +mConfirmPassword);
 
@@ -196,8 +195,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     void setPage2(){
         //getting previous text from name and email and storing in a var
-        mName = nameAndPasswordEditText.getText().toString();
-        mUserName = userEmailAndConfirmPasswordEditText.getText().toString();
+        fetchDataFromCurrentState();
 
 
         Log.d("DATA", "Data from page1 " + mName + "_______" +mUserName);
@@ -215,8 +213,8 @@ public class SignUpActivity extends AppCompatActivity {
         nameTextInputLayout.setHint("Password");
         userNameTextInputLayout.setHint("Confirm Password");
 
-        nameAndPasswordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        userEmailAndConfirmPasswordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        nameAndPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        userEmailAndConfirmPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
 
         nameAndPasswordEditText.setText(null);
@@ -233,8 +231,24 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     void signUp(){
-        toast("signUp");
+        fetchDataFromCurrentState();
+        if(!(mPassword.equals(mConfirmPassword) ? true:false)){
+            nameAndPasswordEditText.requestFocus(1);
+            userEmailAndConfirmPasswordEditText.requestFocus();
+            toast("pass");
+        }
     }
+
+    void fetchDataFromCurrentState(){
+        if(currentPage==1){
+            mName = nameAndPasswordEditText.getText().toString();
+            mUserName = userEmailAndConfirmPasswordEditText.getText().toString();
+        }else{
+            mPassword = nameAndPasswordEditText.getText().toString();
+            mConfirmPassword = userEmailAndConfirmPasswordEditText.getText().toString();
+        }
+    }
+
 
     void toast(String message){
         Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
