@@ -25,13 +25,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/pet_items_circleImageView"
+            android:layout_marginLeft="8dp"
             android:layout_centerVertical="true"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pet Name"/>
+                android:text="Pet Name"
+                android:textSize="18sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -39,8 +41,17 @@
                 android:text="Breed Name"/>
 
 
-
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20th Feb 2020"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="12sp"/>
 
 
 
