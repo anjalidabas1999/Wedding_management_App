@@ -7,38 +7,56 @@
     tools:context=".HomeActivity">
 
     <RelativeLayout
-        android:id="@+id/backLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
-
-
-    <RelativeLayout
-        android:id="@+id/root"
+        android:id="@+id/homeActivity_backLayout_relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back Layout"
+            android:layout_centerInParent="true"
+            android:textSize="52sp"/>
+
+
+    </RelativeLayout>
+
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/homeActivity_root_relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff">
+
+        <!--<Button
+            android:id="@+id/homeActivity_slide_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Slide"/>-->
+
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/homeActivity_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/pet_item"/>
+            tools:listitem="@layout/pet_item" />
 
 
         <LinearLayout
-            android:id="@+id/overlay"
+            android:id="@+id/homeActivity_overlay_linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#7C000000"
             android:visibility="invisible"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal"
+            />
 
         <include layout="@layout/pets_detail_bottom_sheet"/>
 
 
 
-    </RelativeLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 

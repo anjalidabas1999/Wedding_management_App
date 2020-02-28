@@ -1,62 +1,117 @@
 package com.example.pets;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
-import android.app.ActionBar;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
-import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.pets.Classes.Pet;
+import com.example.pets.adapter.PetAdapter;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
 
-    RelativeLayout root;
+    CoordinatorLayout root;
     LinearLayout overLay;
+
+    BottomSheetBehavior bottomSheetBehavior;
+
+    Button slideButton;
+
+    RecyclerView recyclerView;
+
+    PetAdapter adapter;
+
+    ArrayList<Pet> db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        root = findViewById(R.id.root);
-        overLay = findViewById(R.id.overlay);
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-        root.setOnClickListener(new View.OnClickListener() {
+
+        db = new ArrayList<>();
+
+        db.add(new Pet("Tom", "Breed", "20Th Feb 2020"));
+        db.add(new Pet("Tiger", "Chihuahua", "01Th Jan 2008"));
+        db.add(new Pet("Browny", "German", "29Th Feb 2018"));
+        db.add(new Pet("Tommy", "Anhbdd", "13Th Aug 2015"));
+        db.add(new Pet("Guchchu", "Pagal", "20Th Nov 2020"));
+        db.add(new Pet("Tom", "Breed", "20Th Mar 2019"));
+        db.add(new Pet("Tom", "Breed", "20Th Feb 2020"));
+        db.add(new Pet("Tiger", "Chihuahua", "01Th Jan 2008"));
+        db.add(new Pet("Browny", "German", "29Th Feb 2018"));
+        db.add(new Pet("Tommy", "Anhbdd", "13Th Aug 2015"));
+        db.add(new Pet("Guchchu", "Pagal", "20Th Nov 2020"));
+        db.add(new Pet("Tom", "Breed", "20Th Mar 2019"));
+        db.add(new Pet("Tom", "Breed", "20Th Feb 2020"));
+        db.add(new Pet("Tiger", "Chihuahua", "01Th Jan 2008"));
+        db.add(new Pet("Browny", "German", "29Th Feb 2018"));
+        db.add(new Pet("Tommy", "Anhbdd", "13Th Aug 2015"));
+        db.add(new Pet("Guchchu", "Pagal", "20Th Nov 2020"));
+        db.add(new Pet("Tom", "Breed", "20Th Mar 2019"));
+
+        setUp();
+
+
+
+
+    }
+
+    void setUp(){
+
+        //getting views by id
+        root = findViewById(R.id.homeActivity_root_relativeLayout);
+        overLay = findViewById(R.id.homeActivity_overlay_linearLayout);
+        recyclerView = findViewById(R.id.homeActivity_recyclerView);
+        //slideButton = findViewById(R.id.homeActivity_slide_button);
+
+
+        //setting recycler view
+        recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
+        recyclerView.setHasFixedSize(false);
+
+        adapter = new PetAdapter(db);
+
+        recyclerView.setAdapter(adapter);
+
+        //setting bottom sheet
+        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.linearLayout));
+        bottomSheetBehavior.setPeekHeight(100);
+        bottomSheetBehavior.setHideable(false);
+        bottomSheetBehavior.setFitToContents(false);
+
+        //setting on click listeners
+        /*slideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 overLay.setVisibility(View.VISIBLE);
-
 
                 ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(root, "translationX", 700f);
                 objectAnimator1.setDuration(500);
                 objectAnimator1.start();
-
-
-
             }
-
-        });
-
+        });*/
 
 
         mAuth = FirebaseAuth.getInstance();
 
         Toast.makeText(this, mAuth.getUid(), Toast.LENGTH_SHORT).show();
-
 
     }
 

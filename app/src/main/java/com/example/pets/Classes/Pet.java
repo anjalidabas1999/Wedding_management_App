@@ -3,23 +3,23 @@ package com.example.pets.Classes;
 public class Pet {
 
     String name;
-    String owner;
+    String breed;
     String description;
     String dateAdded;
     String healthDesc;
 
 
-    public Pet(String name, String owner, String description, String dateAdded, String healthDesc) {
+    public Pet(String name, String breed, String description, String dateAdded, String healthDesc) {
         this.name = name;
-        this.owner = owner;
+        this.breed = breed;
         this.description = description;
         this.dateAdded = dateAdded;
         this.healthDesc = healthDesc;
     }
 
-    public Pet(String name, String owner, String dateAdded) {
+    public Pet(String name, String breed, String dateAdded) {
         this.name = name;
-        this.owner = owner;
+        this.breed = breed;
         this.dateAdded = dateAdded;
     }
 
@@ -34,12 +34,12 @@ public class Pet {
         this.name = name;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getBreed() {
+        return breed;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setBreed(String breed) {
+        this.breed = breed;
     }
 
     public String getDescription() {

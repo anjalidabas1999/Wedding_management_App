@@ -4,6 +4,8 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +20,10 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
     ArrayList<Pet> pets;
 
+    public PetAdapter(ArrayList<Pet> pets) {
+        this.pets = pets;
+    }
+
     @NonNull
     @Override
     public PetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -27,7 +33,11 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull PetViewHolder holder, int position) {
+        Pet currentPet = pets.get(position);
 
+        holder.petName.setText(currentPet.getName());
+        holder.petBreed.setText(currentPet.getBreed());
+        holder.date.setText(currentPet.getDateAdded());
     }
 
     @Override
@@ -46,10 +56,17 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
     public class PetViewHolder extends RecyclerView.ViewHolder{
 
-
+        ImageView image;
+        TextView petName;
+        TextView  petBreed;
+        TextView date;
 
         public PetViewHolder(@NonNull View itemView) {
             super(itemView);
+            image = itemView.findViewById(R.id.pet_items_circleImageView);
+            petName = itemView.findViewById(R.id.pet_items_petName_textView);
+            petBreed = itemView.findViewById(R.id.pet_items_breedName_textView);
+            date = itemView.findViewById(R.id.pet_items_date_textView);
 
         }
     }
