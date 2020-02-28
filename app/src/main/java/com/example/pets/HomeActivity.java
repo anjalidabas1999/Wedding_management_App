@@ -166,7 +166,7 @@ public class HomeActivity extends AppCompatActivity {
     void updateBottomSheet(Pet pet){
         overLay.setVisibility(View.VISIBLE);
         bottomSheetHeadingTextView.setText(pet.getName());
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
 

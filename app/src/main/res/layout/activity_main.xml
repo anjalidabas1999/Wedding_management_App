@@ -1,34 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/homeActivity_root_relativeLayout"
     tools:context=".HomeActivity">
 
-    <RelativeLayout
-        android:id="@+id/homeActivity_backLayout_relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back Layout"
-            android:layout_centerInParent="true"
-            android:textSize="52sp"/>
 
 
-    </RelativeLayout>
-
-
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/homeActivity_root_relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#fff">
 
         <!--<Button
             android:id="@+id/homeActivity_slide_button"
@@ -52,12 +32,18 @@
             android:orientation="horizontal"
             />
 
-        <include layout="@layout/pets_detail_bottom_sheet"/>
+        <include
+            layout="@layout/pets_detail_bottom_sheet"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:src="@drawable/ic_edit_white_24dp"
+            app:layout_anchor="@id/linearLayout"
+            app:layout_anchorGravity="top|right"/>
 
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
-
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
