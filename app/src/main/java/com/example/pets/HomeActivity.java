@@ -1,5 +1,6 @@
 package com.example.pets;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pets.Classes.Pet;
@@ -37,10 +39,17 @@ public class HomeActivity extends AppCompatActivity {
 
     ArrayList<Pet> db;
 
+    //bottomsheet
+    TextView bottomSheetHeadingTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        Toast.makeText(this, mAuth.getUid(), Toast.LENGTH_SHORT).show();
 
         //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
@@ -81,20 +90,25 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.homeActivity_recyclerView);
         //slideButton = findViewById(R.id.homeActivity_slide_button);
 
+        //getting bottom sheet layout
+        bottomSheetHeadingTextView = findViewById(R.id.heading);
+
 
         //setting recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
         recyclerView.setHasFixedSize(false);
 
-        adapter = new PetAdapter(db);
+        adapter = new PetAdapter(db, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateBottomSheet(adapter.get(recyclerView.getChildLayoutPosition(view)));
+            }
+        });
 
         recyclerView.setAdapter(adapter);
 
         //setting bottom sheet
-        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.linearLayout));
-        bottomSheetBehavior.setPeekHeight(100);
-        bottomSheetBehavior.setHideable(false);
-        bottomSheetBehavior.setFitToContents(false);
+        setUpBottomSheet();
 
         //setting on click listeners
         /*slideButton.setOnClickListener(new View.OnClickListener() {
@@ -108,11 +122,51 @@ public class HomeActivity extends AppCompatActivity {
             }
         });*/
 
+        overLay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(overLay.getVisibility() == View.VISIBLE){
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+        });
 
-        mAuth = FirebaseAuth.getInstance();
 
-        Toast.makeText(this, mAuth.getUid(), Toast.LENGTH_SHORT).show();
 
+    }
+
+    void setUpBottomSheet(){
+        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.linearLayout));
+        bottomSheetBehavior.setPeekHeight(100);
+        bottomSheetBehavior.setHideable(false);
+//        bottomSheetBehavior.setFitToContents(false);
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int newState) {
+                switch (newState){
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        overLay.setVisibility(View.GONE);
+                        break;
+                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
+                        overLay.setVisibility(View.VISIBLE);
+                        break;
+
+                }
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
+    }
+
+    void updateBottomSheet(Pet pet){
+        overLay.setVisibility(View.VISIBLE);
+        bottomSheetHeadingTextView.setText(pet.getName());
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
     }
 
 

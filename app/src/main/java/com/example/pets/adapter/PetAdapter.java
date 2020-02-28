@@ -20,8 +20,12 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
     ArrayList<Pet> pets;
 
-    public PetAdapter(ArrayList<Pet> pets) {
+    private View.OnClickListener mOnClickListener;
+
+
+    public PetAdapter(ArrayList<Pet> pets, View.OnClickListener listener) {
         this.pets = pets;
+        this.mOnClickListener = listener;
     }
 
     @NonNull
@@ -45,12 +49,16 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
         return pets.size();
     }
 
-    void add(Pet pet){
+    public void add(Pet pet){
         pets.add(pet);
     }
 
-    void addAll(List<Pet> pets){
+    public void addAll(List<Pet> pets){
         pets.addAll(pets);
+    }
+
+    public Pet get(int pos){
+        return pets.get(pos);
     }
 
 
@@ -63,6 +71,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
         public PetViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(mOnClickListener);
             image = itemView.findViewById(R.id.pet_items_circleImageView);
             petName = itemView.findViewById(R.id.pet_items_petName_textView);
             petBreed = itemView.findViewById(R.id.pet_items_breedName_textView);

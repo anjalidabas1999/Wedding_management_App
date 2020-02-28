@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#000"
+    android:backgroundTint="#00000000"
     android:id="@+id/linearLayout"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    app:behavior_peekHeight="100dp">
+    app:behavior_peekHeight="100dp"
+    android:elevation="201dp"
+    android:padding="8dp">
 
-    <LinearLayout
-        android:id="@+id/root"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
 
-        <Button
+        android:background="@drawable/bottom_sheet_round_corner">
+
+        <TextView
+            android:id="@+id/heading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CLICK ME"/>
-    </LinearLayout>
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            android:text="Demo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"/>
+
+    </RelativeLayout>
 
 
 
 
 
-</LinearLayout>
+
+
+</FrameLayout>
