@@ -32,6 +32,10 @@ dependencies {
     implementation 'com.google.android.material:material:x.x.x'
 
 
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+
+
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'

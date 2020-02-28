@@ -17,6 +17,12 @@ public class Pet {
         this.healthDesc = healthDesc;
     }
 
+    public Pet(String name, String owner, String dateAdded) {
+        this.name = name;
+        this.owner = owner;
+        this.dateAdded = dateAdded;
+    }
+
     public Pet() {
     }
 
