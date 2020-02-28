@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.pets.Classes.Pet;
 import com.example.pets.adapter.PetAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -35,12 +36,15 @@ public class HomeActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
+    FloatingActionButton floatingActionButton;
+
     PetAdapter adapter;
 
     ArrayList<Pet> db;
 
     //bottomsheet
     TextView bottomSheetHeadingTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,7 @@ public class HomeActivity extends AppCompatActivity {
         root = findViewById(R.id.homeActivity_root_relativeLayout);
         overLay = findViewById(R.id.homeActivity_overlay_linearLayout);
         recyclerView = findViewById(R.id.homeActivity_recyclerView);
+        floatingActionButton = findViewById(R.id.homeActivity_bottomSheetEditorButton_fab);
         //slideButton = findViewById(R.id.homeActivity_slide_button);
 
         //getting bottom sheet layout
@@ -151,14 +156,15 @@ public class HomeActivity extends AppCompatActivity {
                     case BottomSheetBehavior.STATE_HALF_EXPANDED:
                         overLay.setVisibility(View.VISIBLE);
                         break;
-
                 }
 
             }
 
             @Override
-            public void onSlide(@NonNull View view, float v) {
-
+            public void onSlide(@NonNull View view, float slideOffset) {
+                Toast.makeText(HomeActivity.this, ""+slideOffset, Toast.LENGTH_SHORT).show();
+                overLay.animate().alpha(slideOffset).setDuration(0).start();
+                floatingActionButton.animate().scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
             }
         });
     }
