@@ -10,9 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,8 +27,15 @@ import com.example.pets.adapter.PetAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -52,6 +63,7 @@ public class HomeActivity extends AppCompatActivity {
 
     //bottomsheet
     TextView bottomSheetHeadingTextView;
+    ImageView bottomSheetImagView;
 
 
     @Override
@@ -109,6 +121,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //getting bottom sheet layout
         bottomSheetHeadingTextView = findViewById(R.id.bottomSheet_name_textView);
+        bottomSheetImagView = findViewById(R.id.bottomSheet_imageView);
 
 
         //setting recycler view
@@ -234,6 +247,34 @@ public class HomeActivity extends AppCompatActivity {
         overLay.setVisibility(View.VISIBLE);
         bottomSheetHeadingTextView.setText(pet.getName());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        bottomSheetImagView.setImageBitmap(generateQR(pet));
+
+    }
+
+    Bitmap generateQR(Pet pet){
+        Gson gson = new Gson();
+        String data = gson.toJson(pet);
+
+        BarcodeEncoder barcode_content = new BarcodeEncoder();
+        try {
+            Bitmap bm = barcode_content.encodeBitmap(data, BarcodeFormat.QR_CODE, 15, 15);
+            return bm;
+        } catch (WriterException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        /*QRGEncoder qrgEncoder = new QRGEncoder(data, null, QRGContents.Type.TEXT, 1);
+        qrgEncoder.setColorBlack(Color.RED);
+        qrgEncoder.setColorWhite(Color.BLUE);
+        try {
+            // Getting QR-Code as Bitmap
+            bitmap = qrgEncoder.getBitmap();
+            // Setting Bitmap to ImageView
+            return bitmap;
+        } catch (Exception e) {
+            return null;
+        }*/
     }
 
 
