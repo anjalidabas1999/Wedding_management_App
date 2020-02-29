@@ -29,6 +29,7 @@
             android:layout_height="match_parent"
             android:background="#7C000000"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:alpha="0"/>
 
         <include

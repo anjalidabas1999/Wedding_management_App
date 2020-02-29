@@ -60,24 +60,24 @@ public class HomeActivity extends AppCompatActivity {
 
         db = new ArrayList<>();
 
-        db.add(new Pet("Tom", "Breed", "20Th Feb 2020"));
-        db.add(new Pet("Tiger", "Chihuahua", "01Th Jan 2008"));
-        db.add(new Pet("Browny", "German", "29Th Feb 2018"));
-        db.add(new Pet("Tommy", "Anhbdd", "13Th Aug 2015"));
-        db.add(new Pet("Guchchu", "Pagal", "20Th Nov 2020"));
-        db.add(new Pet("Tom", "Breed", "20Th Mar 2019"));
-        db.add(new Pet("Tom", "Breed", "20Th Feb 2020"));
-        db.add(new Pet("Tiger", "Chihuahua", "01Th Jan 2008"));
-        db.add(new Pet("Browny", "German", "29Th Feb 2018"));
-        db.add(new Pet("Tommy", "Anhbdd", "13Th Aug 2015"));
-        db.add(new Pet("Guchchu", "Pagal", "20Th Nov 2020"));
-        db.add(new Pet("Tom", "Breed", "20Th Mar 2019"));
-        db.add(new Pet("Tom", "Breed", "20Th Feb 2020"));
-        db.add(new Pet("Tiger", "Chihuahua", "01Th Jan 2008"));
-        db.add(new Pet("Browny", "German", "29Th Feb 2018"));
-        db.add(new Pet("Tommy", "Anhbdd", "13Th Aug 2015"));
-        db.add(new Pet("Guchchu", "Pagal", "20Th Nov 2020"));
-        db.add(new Pet("Tom", "Breed", "20Th Mar 2019"));
+        db.add(new Pet("Tom", "Breed", "20 Feb 2020"));
+        db.add(new Pet("Tiger", "Chihuahua", "01 Jan 2008"));
+        db.add(new Pet("Browny", "German", "29 Feb 2018"));
+        db.add(new Pet("Tommy", "Anhbdd", "13 Aug 2015"));
+        db.add(new Pet("Guchchu", "Pagal", "20 Nov 2020"));
+        db.add(new Pet("Tom", "Breed", "20 Mar 2019"));
+        db.add(new Pet("Tom", "Breed", "20 Feb 2020"));
+        db.add(new Pet("Tiger", "Chihuahua", "01 Jan 2008"));
+        db.add(new Pet("Browny", "German", "29 Feb 2018"));
+        db.add(new Pet("Tommy", "Anhbdd", "13 Aug 2015"));
+        db.add(new Pet("Guchchu", "Pagal", "20 Nov 2020"));
+        db.add(new Pet("Tom", "Breed", "20 Mar 2019"));
+        db.add(new Pet("Tom", "Breed", "20 Feb 2020"));
+        db.add(new Pet("Tiger", "Chihuahua", "01 Jan 2008"));
+        db.add(new Pet("Browny", "German", "29 Feb 2018"));
+        db.add(new Pet("Tommy", "Anhbdd", "13 Aug 2015"));
+        db.add(new Pet("Guchchu", "Pagal", "20 Nov 2020"));
+        db.add(new Pet("Tom", "Breed", "20 Mar 2019"));
 
         setUp();
 
@@ -142,7 +142,7 @@ public class HomeActivity extends AppCompatActivity {
 
     void setUpBottomSheet(){
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.linearLayout));
-        bottomSheetBehavior.setPeekHeight(100);
+        bottomSheetBehavior.setPeekHeight(75);
         bottomSheetBehavior.setHideable(false);
 //        bottomSheetBehavior.setFitToContents(false);
 
@@ -162,7 +162,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onSlide(@NonNull View view, float slideOffset) {
-                Toast.makeText(HomeActivity.this, ""+slideOffset, Toast.LENGTH_SHORT).show();
+                overLay.setVisibility(View.VISIBLE);
                 overLay.animate().alpha(slideOffset).setDuration(0).start();
                 floatingActionButton.animate().scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
             }
