@@ -96,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
         //slideButton = findViewById(R.id.homeActivity_slide_button);
 
         //getting bottom sheet layout
-        bottomSheetHeadingTextView = findViewById(R.id.heading);
+        bottomSheetHeadingTextView = findViewById(R.id.bottomSheet_name_textView);
 
 
         //setting recycler view
@@ -131,7 +131,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(overLay.getVisibility() == View.VISIBLE){
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    //bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
             }
         });
@@ -141,7 +141,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     void setUpBottomSheet(){
-        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.linearLayout));
+        RelativeLayout bottomSheet = findViewById(R.id.linearLayout);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setPeekHeight(75);
         bottomSheetBehavior.setHideable(false);
 //        bottomSheetBehavior.setFitToContents(false);

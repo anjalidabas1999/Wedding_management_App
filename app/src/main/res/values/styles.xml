@@ -27,6 +27,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">#333847</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="background">@color/accounts_dark_background</item>
 
         <item name="android:windowActivityTransitions">true</item>
 
@@ -67,6 +68,10 @@
         <item name="android:textSize">22sp</item>
         <item name="android:layout_marginBottom">22dp</item>
         <item name="android:background">@drawable/rounded_button_background_dark</item>
+    </style>
+
+    <style name="very_small_textAppearence_Theme" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textDirection">rtl</item>
     </style>
 
 

@@ -30,7 +30,7 @@
             android:background="#7C000000"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:alpha="0"/>
+            android:alpha="1"/>
 
         <include
             layout="@layout/pets_detail_bottom_sheet"/>

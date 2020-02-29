@@ -8,7 +8,7 @@
         android:bottomLeftRadius="42dp"
         android:bottomRightRadius="42dp"/>
 
-    <solid android:color="#000"/>
+    <solid android:color="@color/accounts_dark_background"/>
 
 
 
