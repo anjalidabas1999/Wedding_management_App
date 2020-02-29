@@ -1,12 +1,15 @@
 package com.example.pets;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.ObjectAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +39,12 @@ public class HomeActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
-    FloatingActionButton floatingActionButton;
+    int fabState = 0; // 0: fab closed, 1:fab opened
+
+    FloatingActionButton bottomSheetFab;
+    FloatingActionButton addNewEntryFab;
+    FloatingActionButton scanQrCodeFab;
+    FloatingActionButton manualNewEntryFab;
 
     PetAdapter adapter;
 
@@ -92,7 +100,11 @@ public class HomeActivity extends AppCompatActivity {
         root = findViewById(R.id.homeActivity_root_relativeLayout);
         overLay = findViewById(R.id.homeActivity_overlay_linearLayout);
         recyclerView = findViewById(R.id.homeActivity_recyclerView);
-        floatingActionButton = findViewById(R.id.homeActivity_bottomSheetEditorButton_fab);
+
+        addNewEntryFab = findViewById(R.id.homeActivity_newEntry_fab);
+        bottomSheetFab = findViewById(R.id.homeActivity_bottomSheetEditorButton_fab);
+        manualNewEntryFab = findViewById(R.id.homeActivity_newEntry_manual_fab);
+        scanQrCodeFab = findViewById(R.id.homeActivity_newEntry_qr_fab);
         //slideButton = findViewById(R.id.homeActivity_slide_button);
 
         //getting bottom sheet layout
@@ -136,6 +148,53 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        addNewEntryFab.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onClick(View view) {
+                if(fabState == 0){
+                    fabState = 1;
+                    overLay.setVisibility(View.VISIBLE);
+                    manualNewEntryFab.setVisibility(View.VISIBLE);
+                    scanQrCodeFab.setVisibility(View.VISIBLE);
+                    manualNewEntryFab.animate().translationX(-200f).setDuration(500).start();
+                    scanQrCodeFab.animate().translationY(-200f).setDuration(500).start();
+                }else{
+                    fabState = 0;
+                    overLay.setAlpha(0);
+                    overLay.setVisibility(View.INVISIBLE);
+                    manualNewEntryFab.setVisibility(View.GONE);
+                    scanQrCodeFab.setVisibility(View.GONE);
+                    manualNewEntryFab.animate().translationX(0f).setDuration(500).start();
+                    scanQrCodeFab.animate().translationY(0f).setDuration(500).start();
+                    /*manualNewEntryFab.animate().translationX(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            manualNewEntryFab.setVisibility(View.GONE);
+                        }
+                    }).start();
+                    scanQrCodeFab.animate().translationY(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            scanQrCodeFab.setVisibility(View.GONE);
+                        }
+                    }).start();*/
+                }
+
+            }
+        });
+
+
+
+        bottomSheetFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomeActivity.this, "click", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
 
     }
@@ -165,7 +224,8 @@ public class HomeActivity extends AppCompatActivity {
             public void onSlide(@NonNull View view, float slideOffset) {
                 overLay.setVisibility(View.VISIBLE);
                 overLay.animate().alpha(slideOffset).setDuration(0).start();
-                floatingActionButton.animate().scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
+                bottomSheetFab.animate().scaleX(slideOffset).scaleY(slideOffset).setDuration(0).start();
+                addNewEntryFab.animate().scaleX(1-slideOffset).scaleY(1-slideOffset).setDuration(0).start();
             }
         });
     }
