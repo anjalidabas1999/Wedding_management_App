@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -50,13 +52,15 @@ public class HomeActivity extends AppCompatActivity {
     FloatingActionButton scanQrCodeFab;
     FloatingActionButton manualNewEntryFab;
 
+    CoordinatorLayout petShareButton;
+
     PetAdapter adapter;
 
     ArrayList<Pet> db;
 
     //bottomsheet
     TextView bottomSheetHeadingTextView;
-    ImageView bottomSheetImagView;
+    ImageView bottomSheetImageView;
 
 
     @Override
@@ -110,11 +114,13 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetFab = findViewById(R.id.homeActivity_bottomSheetEditorButton_fab);
         manualNewEntryFab = findViewById(R.id.homeActivity_newEntry_manual_fab);
         scanQrCodeFab = findViewById(R.id.homeActivity_newEntry_qr_fab);
+
+        petShareButton = findViewById(R.id.bottomSheet_imageView_container_coordinatorLayout);
         //slideButton = findViewById(R.id.homeActivity_slide_button);
 
         //getting bottom sheet layout
         bottomSheetHeadingTextView = findViewById(R.id.bottomSheet_name_textView);
-        bottomSheetImagView = findViewById(R.id.bottomSheet_imageView);
+        bottomSheetImageView = findViewById(R.id.bottomSheet_imageView);
 
 
         //setting recycler view
@@ -192,18 +198,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-        bottomSheetFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(HomeActivity.this, "click", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
     }
 
     void setUpBottomSheet(){
@@ -235,14 +229,37 @@ public class HomeActivity extends AppCompatActivity {
                 addNewEntryFab.animate().scaleX(1-slideOffset).scaleY(1-slideOffset).setDuration(0).start();
             }
         });
+
+        bottomSheetFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomeActivity.this, "click", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
-    void updateBottomSheet(Pet pet){
+    void updateBottomSheet(final Pet pet){
         overLay.setVisibility(View.VISIBLE);
         bottomSheetHeadingTextView.setText(pet.getName());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        //bottomSheetImagView.setImageBitmap(generateQR(pet));
 
+
+        petShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(pet);
+            }
+        });
+
+    }
+
+    void showDialog(Pet pet){
+        Dialog dialog = new Dialog(HomeActivity.this);
+//        View v = LayoutInflater.from(HomeActivity.this).inflate(R.layout.qr_code_layout, false);
+        dialog.setContentView(R.layout.qr_code_layout);
+        ((ImageView)dialog.findViewById(R.id.dialog_imageView)).setImageBitmap(generateQR(pet));
+        dialog.show();
     }
 
     Bitmap generateQR(Pet pet){
