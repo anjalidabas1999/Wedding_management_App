@@ -1,19 +1,14 @@
 package com.example.pets;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RestrictTo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,8 +26,6 @@ import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -167,6 +160,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(fabState == 0){
                     fabState = 1;
+                    overLay.setAlpha(1);
                     overLay.setVisibility(View.VISIBLE);
                     manualNewEntryFab.setVisibility(View.VISIBLE);
                     scanQrCodeFab.setVisibility(View.VISIBLE);
@@ -247,13 +241,13 @@ public class HomeActivity extends AppCompatActivity {
         overLay.setVisibility(View.VISIBLE);
         bottomSheetHeadingTextView.setText(pet.getName());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        bottomSheetImagView.setImageBitmap(generateQR(pet));
+        //bottomSheetImagView.setImageBitmap(generateQR(pet));
 
     }
 
     Bitmap generateQR(Pet pet){
-        Gson gson = new Gson();
-        String data = gson.toJson(pet);
+        String data = new Gson().toJson(pet);
+
 
         BarcodeEncoder barcode_content = new BarcodeEncoder();
         try {
@@ -263,18 +257,6 @@ public class HomeActivity extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
-
-        /*QRGEncoder qrgEncoder = new QRGEncoder(data, null, QRGContents.Type.TEXT, 1);
-        qrgEncoder.setColorBlack(Color.RED);
-        qrgEncoder.setColorWhite(Color.BLUE);
-        try {
-            // Getting QR-Code as Bitmap
-            bitmap = qrgEncoder.getBitmap();
-            // Setting Bitmap to ImageView
-            return bitmap;
-        } catch (Exception e) {
-            return null;
-        }*/
     }
 
 
