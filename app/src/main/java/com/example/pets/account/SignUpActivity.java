@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -40,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     Button signUpButton;
 
-    ProgressBar progressBar;
+    ProgressDialog progressDialog;
 
     FloatingActionButton profileImageFab;
 
@@ -80,7 +81,7 @@ public class SignUpActivity extends AppCompatActivity {
         profileImageFab = findViewById(R.id.signUpActivity_addProfileImage_fab);
         signUpButtonInfo = findViewById(R.id.loginActivity_signUpButtonInfo_textView);
 
-        progressBar = new ProgressBar(this);
+        progressDialog = new ProgressDialog(this);
 
         nameAndPasswordEditText = nameTextInputLayout.getEditText();
         userEmailAndConfirmPasswordEditText = userNameTextInputLayout.getEditText();
@@ -254,9 +255,10 @@ public class SignUpActivity extends AppCompatActivity {
             userEmailAndConfirmPasswordEditText.requestFocus();
 
         }else{
-            toast("pass");
+            toast("pass: ");
 
-            progressBar.setIndeterminate(true);
+            progressDialog.setMessage("Signing up");
+            progressDialog.show();
 
             mAuth.createUserWithEmailAndPassword(mUserName, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -265,7 +267,7 @@ public class SignUpActivity extends AppCompatActivity {
                         toast("SignUp successfull: "+task.getResult().getUser().getEmail());
                         startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
                     }
-
+                    progressDialog.dismiss();
                 }
             });
 

@@ -27,17 +27,17 @@
             android:name=".SplashActivity"
             android:theme="@style/NoAppBarTheme_IntroScreen">
 
-
-
-        </activity>
-
-        <activity android:name=".HomeActivity"
-            android:theme="@style/NoAppBarTheme_IntroScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+
+        <activity android:name=".HomeActivity"
+            android:theme="@style/NoAppBarTheme_IntroScreen">
+
         </activity>
     </application>
 
