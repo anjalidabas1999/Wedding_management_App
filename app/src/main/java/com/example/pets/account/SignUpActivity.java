@@ -124,8 +124,16 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if(currentPage == 2){
+                if(currentPage == 2 &&
+                        mName != "" && mPassword != "" && mUserName != "" &&
+                        mName != null && mPassword != null && mUserName != null
+                ){
                     signUp();
+                }else{
+                    setPage1();
+                    nameAndPasswordEditText.setText(mName != "" && mName != null? mName: "");
+                    userEmailAndConfirmPasswordEditText.setText(mUserName != "" && mUserName != null? mUserName: "");
+                    nameAndPasswordEditText.requestFocus();
                 }
                 return true;
             }
@@ -289,25 +297,19 @@ public class SignUpActivity extends AppCompatActivity {
 
     void setUpServerDatabase(String uid){
         mFireStore.collection("user").document(uid).set(new User(mName, mUserName, mPassword))
-
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        toast("SignUp successfull: ");
                         startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
                         dialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                toast("failed: "+e.getLocalizedMessage());
+                toast("failed: "+e.getMessage());
+                dialog.dismiss();
             }
         });
-
-
-
-
-
     }
 
     void fetchDataFromCurrentState(){
