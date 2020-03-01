@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.pets.account.LoginActivity;
 import com.example.pets.account.SignUpActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -35,7 +36,7 @@ public class SplashActivity extends AppCompatActivity {
     Intent logInIntent;
     Intent signUpIntent;
 
-
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void setup() {
+        //getting firebase refrences
+        mAuth = FirebaseAuth.getInstance();
+
         //getting views by their ids
         appLogo = findViewById(R.id.splashActivity_appIcon_ImageView);
         root = findViewById(R.id.root);
@@ -168,5 +172,14 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mAuth.getCurrentUser()!=null){
+            startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+            finish();
+        }
     }
 }

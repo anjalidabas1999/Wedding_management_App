@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +25,8 @@ import android.widget.Toast;
 
 import com.example.pets.HomeActivity;
 import com.example.pets.R;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.ChasingDots;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -41,7 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     Button signUpButton;
 
-    ProgressDialog progressDialog;
+    Dialog dialog;
 
     FloatingActionButton profileImageFab;
 
@@ -81,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
         profileImageFab = findViewById(R.id.signUpActivity_addProfileImage_fab);
         signUpButtonInfo = findViewById(R.id.loginActivity_signUpButtonInfo_textView);
 
-        progressDialog = new ProgressDialog(this);
+        dialog = new Dialog(this);
 
         nameAndPasswordEditText = nameTextInputLayout.getEditText();
         userEmailAndConfirmPasswordEditText = userNameTextInputLayout.getEditText();
@@ -249,6 +252,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     void signUp(){
+        dialog.show();
         fetchDataFromCurrentState();
         if(!(mPassword.equals(mConfirmPassword) ? true:false)){
             nameAndPasswordEditText.requestFocus(1);
@@ -257,9 +261,6 @@ public class SignUpActivity extends AppCompatActivity {
         }else{
             toast("pass: ");
 
-            progressDialog.setMessage("Signing up");
-            progressDialog.show();
-
             mAuth.createUserWithEmailAndPassword(mUserName, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -267,7 +268,7 @@ public class SignUpActivity extends AppCompatActivity {
                         toast("SignUp successfull: "+task.getResult().getUser().getEmail());
                         startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
                     }
-                    progressDialog.dismiss();
+                    dialog.dismiss();
                 }
             });
 
@@ -289,6 +290,17 @@ public class SignUpActivity extends AppCompatActivity {
             mPassword = nameAndPasswordEditText.getText().toString();
             mConfirmPassword = userEmailAndConfirmPasswordEditText.getText().toString();
         }
+    }
+
+    void setUpDialog(){
+        dialog.setContentView(R.layout.progress_dialog);
+
+        ProgressBar progressBar = dialog.findViewById(R.id.dialog_progressBar);
+
+        Sprite anim = new ChasingDots();
+        anim.setColor(getResources().getColor(R.color.white));
+        progressBar.setIndeterminateDrawable(anim);
+
     }
 
     void toast(String message){

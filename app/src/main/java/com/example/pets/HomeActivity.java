@@ -6,13 +6,18 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -46,6 +51,7 @@ public class HomeActivity extends AppCompatActivity {
     RecyclerView recyclerView;
 
     int fabState = 0; // 0: fab closed, 1:fab opened
+    int drawerState = 0; //0: closed, 1:opened
 
     FloatingActionButton bottomSheetFab;
     FloatingActionButton addNewEntryFab;
@@ -54,9 +60,16 @@ public class HomeActivity extends AppCompatActivity {
 
     CoordinatorLayout petShareButton;
 
+    ImageButton drawerOpener;
+
     PetAdapter adapter;
 
     ArrayList<Pet> db;
+
+    //drawer
+    TextView accountsItemTextView;
+    TextView settingsItemTextView;
+    TextView logOutItemTextView;
 
     //bottomsheet
     TextView bottomSheetHeadingTextView;
@@ -109,6 +122,7 @@ public class HomeActivity extends AppCompatActivity {
         root = findViewById(R.id.homeActivity_root_relativeLayout);
         overLay = findViewById(R.id.homeActivity_overlay_linearLayout);
         recyclerView = findViewById(R.id.homeActivity_recyclerView);
+        drawerOpener = findViewById(R.id.homeActivity_drawerOpener_imageView);
 
         addNewEntryFab = findViewById(R.id.homeActivity_newEntry_fab);
         bottomSheetFab = findViewById(R.id.homeActivity_bottomSheetEditorButton_fab);
@@ -117,6 +131,12 @@ public class HomeActivity extends AppCompatActivity {
 
         petShareButton = findViewById(R.id.bottomSheet_imageView_container_coordinatorLayout);
         //slideButton = findViewById(R.id.homeActivity_slide_button);
+
+        //getting drawer layout
+        accountsItemTextView = findViewById(R.id.menu_accountItem_textView);
+        settingsItemTextView = findViewById(R.id.menu_SettingsItem_textView);
+        logOutItemTextView = findViewById(R.id.menu_logOut_textView);
+
 
         //getting bottom sheet layout
         bottomSheetHeadingTextView = findViewById(R.id.bottomSheet_name_textView);
@@ -150,6 +170,17 @@ public class HomeActivity extends AppCompatActivity {
                 objectAnimator1.start();
             }
         });*/
+
+        drawerOpener.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(drawerState == 0){
+                    openDrawer();
+                }else {
+                    closeDrawer();
+                }
+            }
+        });
 
         overLay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,6 +282,118 @@ public class HomeActivity extends AppCompatActivity {
                 showDialog(pet);
             }
         });
+
+    }
+
+    void openDrawer(){
+        drawerState = 1;
+        root.animate().scaleX(0.7f).scaleY(0.7f).translationX(300).setInterpolator(new AccelerateInterpolator()).setDuration(500).start();
+        drawerOpener.animate().rotation(180).setDuration(500).start();
+        //animating drawer items
+        accountsItemTextView.animate().translationX(-200).setDuration(0).start();
+        settingsItemTextView.animate().translationX(-200).setDuration(0).start();
+        logOutItemTextView.animate().translationX(-200).setDuration(0).start();
+
+        accountsItemTextView.setVisibility(View.VISIBLE);
+        settingsItemTextView.setVisibility(View.VISIBLE);
+        logOutItemTextView.setVisibility(View.VISIBLE);
+
+        final int animDuration = 200;
+        accountsItemTextView.animate().translationX(0).setDuration(animDuration).setInterpolator(new BounceInterpolator()).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                settingsItemTextView.animate().translationX(0).setDuration(animDuration).setInterpolator(new BounceInterpolator()).setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        logOutItemTextView.animate().translationX(0).setDuration(animDuration).setInterpolator(new BounceInterpolator()).start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        }).start();
+
+
+
+    }
+
+    void closeDrawer(){
+        drawerState = 0;
+        root.animate().scaleX(1f).scaleY(1f).translationX(0).setInterpolator(new AccelerateInterpolator()).setDuration(500).start();
+        drawerOpener.animate().rotation(0).setDuration(500).start();
+        //animating drawer items
+        final int animDuration = 100;
+
+        accountsItemTextView.animate().translationX(-200).setDuration(animDuration).setInterpolator(new BounceInterpolator()).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                settingsItemTextView.animate().translationX(-200).setDuration(animDuration).setInterpolator(new BounceInterpolator()).setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        logOutItemTextView.animate().translationX(-200).setDuration(animDuration).setInterpolator(new BounceInterpolator()).start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        }).start();
+
 
     }
 

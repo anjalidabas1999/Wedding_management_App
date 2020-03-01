@@ -1,80 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/accounts_dark_background"
-    android:id="@+id/homeActivity_root_relativeLayout"
     tools:context=".HomeActivity">
 
+        <include layout="@layout/drawer_layout"/>
 
-
-
-        <!--<Button
-            android:id="@+id/homeActivity_slide_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Slide"/>-->
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/homeActivity_recyclerView"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/pet_item" />
+            android:background="@color/accounts_dark_background"
+            android:id="@+id/homeActivity_root_relativeLayout">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/homeActivity_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/pet_item" />
+
+                <ImageButton
+                    android:id="@+id/homeActivity_drawerOpener_imageView"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_gravity="top|start"
+                    android:background="@drawable/circle_accent"
+                    android:src="@drawable/ic_drawer_open_thick"
+                    android:layout_margin="16dp"
+                    android:alpha="1"/>
+
+                <LinearLayout
+                    android:id="@+id/homeActivity_overlay_linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#7C000000"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:alpha="1"/>
+
+                <include
+                    layout="@layout/pets_detail_bottom_sheet"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/homeActivity_bottomSheetEditorButton_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="32dp"
+                    android:src="@drawable/ic_edit_white_24dp"
+                    app:layout_anchor="@id/linearLayout"
+                    app:layout_anchorGravity="top|right"
+                    android:scaleX="0"
+                    android:scaleY="0"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/homeActivity_newEntry_manual_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_margin="32dp"
+                    android:src="@drawable/ic_edit_white_24dp"
+                    android:visibility="gone"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/homeActivity_newEntry_qr_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_margin="32dp"
+                    android:src="@drawable/ic_qr_code"
+                    android:visibility="gone"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/homeActivity_newEntry_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_margin="32dp"
+                    android:src="@drawable/ic_add_white_24dp"
+                    />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
-        <LinearLayout
-            android:id="@+id/homeActivity_overlay_linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#7C000000"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:alpha="1"/>
-
-        <include
-            layout="@layout/pets_detail_bottom_sheet"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/homeActivity_bottomSheetEditorButton_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
-            android:src="@drawable/ic_edit_white_24dp"
-            app:layout_anchor="@id/linearLayout"
-            app:layout_anchorGravity="top|right"
-            android:scaleX="0"
-            android:scaleY="0"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/homeActivity_newEntry_manual_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="32dp"
-            android:src="@drawable/ic_edit_white_24dp"
-            android:visibility="gone"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/homeActivity_newEntry_qr_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="32dp"
-            android:src="@drawable/ic_qr_code"
-            android:visibility="gone"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/homeActivity_newEntry_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="32dp"
-            android:src="@drawable/ic_add_white_24dp"
-            />
-
-
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>
