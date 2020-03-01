@@ -23,16 +23,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pets.Classes.User;
 import com.example.pets.HomeActivity;
 import com.example.pets.R;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.ChasingDots;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
@@ -65,6 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
     String mConfirmPassword="";
 
     FirebaseAuth mAuth;
+    FirebaseFirestore mFireStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +90,14 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButtonInfo = findViewById(R.id.loginActivity_signUpButtonInfo_textView);
 
         dialog = new Dialog(this);
+        setUpDialog();
 
         nameAndPasswordEditText = nameTextInputLayout.getEditText();
         userEmailAndConfirmPasswordEditText = userNameTextInputLayout.getEditText();
 
         //getting instance of firebase object
         mAuth = FirebaseAuth.getInstance();
+        mFireStore = FirebaseFirestore.getInstance();
 
 
         //adding on click listeners
@@ -265,10 +272,8 @@ public class SignUpActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
-                        toast("SignUp successfull: "+task.getResult().getUser().getEmail());
-                        startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                        setUpServerDatabase(task.getResult().getUser().getUid());
                     }
-                    dialog.dismiss();
                 }
             });
 
@@ -280,6 +285,29 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    void setUpServerDatabase(String uid){
+        mFireStore.collection("user").document(uid).set(new User(mName, mUserName, mPassword))
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        toast("SignUp successfull: ");
+                        startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                        dialog.dismiss();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                toast("failed: "+e.getLocalizedMessage());
+            }
+        });
+
+
+
+
+
     }
 
     void fetchDataFromCurrentState(){
