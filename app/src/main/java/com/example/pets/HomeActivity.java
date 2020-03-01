@@ -9,13 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.BounceInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pets.Classes.Pet;
+import com.example.pets.account.LoginActivity;
 import com.example.pets.adapter.PetAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -67,9 +67,9 @@ public class HomeActivity extends AppCompatActivity {
     ArrayList<Pet> db;
 
     //drawer
-    TextView accountsItemTextView;
-    TextView settingsItemTextView;
-    TextView logOutItemTextView;
+    LinearLayout accountsMenuItem;
+    LinearLayout settingsMenuItem;
+    LinearLayout logOutMenuItem;
 
     //bottomsheet
     TextView bottomSheetHeadingTextView;
@@ -132,10 +132,6 @@ public class HomeActivity extends AppCompatActivity {
         petShareButton = findViewById(R.id.bottomSheet_imageView_container_coordinatorLayout);
         //slideButton = findViewById(R.id.homeActivity_slide_button);
 
-        //getting drawer layout
-        accountsItemTextView = findViewById(R.id.menu_accountItem_textView);
-        settingsItemTextView = findViewById(R.id.menu_SettingsItem_textView);
-        logOutItemTextView = findViewById(R.id.menu_logOut_textView);
 
 
         //getting bottom sheet layout
@@ -158,6 +154,9 @@ public class HomeActivity extends AppCompatActivity {
 
         //setting bottom sheet
         setUpBottomSheet();
+
+        //setting drawer layout
+        setUpDrawer();
 
         //setting on click listeners
         /*slideButton.setOnClickListener(new View.OnClickListener() {
@@ -285,21 +284,41 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    void setUpDrawer(){
+        //getting views by ids
+        accountsMenuItem = findViewById(R.id.menu_accountItem_container_linearLayout);
+        settingsMenuItem = findViewById(R.id.menu_settingsItem_container_linearLayout);
+        logOutMenuItem = findViewById(R.id.menu_logOutItem_container_linearLayout);
+
+        logOutMenuItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuth.signOut();
+                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                finish();
+            }
+        });
+
+
+    }
+
     void openDrawer(){
+        overLay.setVisibility(View.VISIBLE);
         drawerState = 1;
         root.animate().scaleX(0.7f).scaleY(0.7f).translationX(300).setInterpolator(new AccelerateInterpolator()).setDuration(500).start();
         drawerOpener.animate().rotation(180).setDuration(500).start();
         //animating drawer items
-        accountsItemTextView.animate().translationX(-200).setDuration(0).start();
-        settingsItemTextView.animate().translationX(-200).setDuration(0).start();
-        logOutItemTextView.animate().translationX(-200).setDuration(0).start();
+        int travelDist = -400;
+        accountsMenuItem.animate().translationX(travelDist).setDuration(0).start();
+        settingsMenuItem.animate().translationX(travelDist).setDuration(0).start();
+        logOutMenuItem.animate().translationX(travelDist).setDuration(0).start();
 
-        accountsItemTextView.setVisibility(View.VISIBLE);
-        settingsItemTextView.setVisibility(View.VISIBLE);
-        logOutItemTextView.setVisibility(View.VISIBLE);
+        accountsMenuItem.setVisibility(View.VISIBLE);
+        settingsMenuItem.setVisibility(View.VISIBLE);
+        logOutMenuItem.setVisibility(View.VISIBLE);
 
         final int animDuration = 200;
-        accountsItemTextView.animate().translationX(0).setDuration(animDuration).setInterpolator(new BounceInterpolator()).setListener(new Animator.AnimatorListener() {
+        accountsMenuItem.animate().translationX(0).setDuration(animDuration).setInterpolator(new AccelerateInterpolator()).setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
 
@@ -307,7 +326,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                settingsItemTextView.animate().translationX(0).setDuration(animDuration).setInterpolator(new BounceInterpolator()).setListener(new Animator.AnimatorListener() {
+                settingsMenuItem.animate().translationX(0).setDuration(animDuration).setInterpolator(new AccelerateInterpolator()).setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {
 
@@ -315,7 +334,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onAnimationEnd(Animator animator) {
-                        logOutItemTextView.animate().translationX(0).setDuration(animDuration).setInterpolator(new BounceInterpolator()).start();
+                        logOutMenuItem.animate().translationX(0).setDuration(animDuration).setInterpolator(new AccelerateInterpolator()).start();
                     }
 
                     @Override
@@ -346,13 +365,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     void closeDrawer(){
+        overLay.setVisibility(View.GONE);
         drawerState = 0;
         root.animate().scaleX(1f).scaleY(1f).translationX(0).setInterpolator(new AccelerateInterpolator()).setDuration(500).start();
         drawerOpener.animate().rotation(0).setDuration(500).start();
         //animating drawer items
         final int animDuration = 100;
+        final int travelDist = -400;
 
-        accountsItemTextView.animate().translationX(-200).setDuration(animDuration).setInterpolator(new BounceInterpolator()).setListener(new Animator.AnimatorListener() {
+        accountsMenuItem.animate().translationX(travelDist).setDuration(animDuration).setInterpolator(new AccelerateInterpolator()).setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
 
@@ -360,7 +381,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                settingsItemTextView.animate().translationX(-200).setDuration(animDuration).setInterpolator(new BounceInterpolator()).setListener(new Animator.AnimatorListener() {
+                settingsMenuItem.animate().translationX(travelDist).setDuration(animDuration).setInterpolator(new AccelerateInterpolator()).setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animator) {
 
@@ -368,7 +389,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onAnimationEnd(Animator animator) {
-                        logOutItemTextView.animate().translationX(-200).setDuration(animDuration).setInterpolator(new BounceInterpolator()).start();
+                        logOutMenuItem.animate().translationX(travelDist).setDuration(animDuration).setInterpolator(new AccelerateInterpolator()).start();
                     }
 
                     @Override

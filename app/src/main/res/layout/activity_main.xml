@@ -11,7 +11,7 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/accounts_dark_background"
+            android:background="@drawable/home_activity_content_round_corner_background"
             android:id="@+id/homeActivity_root_relativeLayout">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -19,16 +19,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     tools:listitem="@layout/pet_item" />
-
-                <ImageButton
-                    android:id="@+id/homeActivity_drawerOpener_imageView"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:layout_gravity="top|start"
-                    android:background="@drawable/circle_accent"
-                    android:src="@drawable/ic_drawer_open_thick"
-                    android:layout_margin="16dp"
-                    android:alpha="1"/>
 
                 <LinearLayout
                     android:id="@+id/homeActivity_overlay_linearLayout"
@@ -41,6 +31,16 @@
 
                 <include
                     layout="@layout/pets_detail_bottom_sheet"/>
+
+                <ImageButton
+                    android:id="@+id/homeActivity_drawerOpener_imageView"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_gravity="top|start"
+                    android:background="@drawable/circle_accent"
+                    android:src="@drawable/ic_drawer_open_thick"
+                    android:layout_margin="16dp"
+                    android:alpha="1" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/homeActivity_bottomSheetEditorButton_fab"
@@ -81,6 +81,7 @@
                     />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 
 </RelativeLayout>
