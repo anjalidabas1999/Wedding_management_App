@@ -27,10 +27,17 @@ import android.widget.Toast;
 import com.example.pets.Classes.Pet;
 import com.example.pets.account.LoginActivity;
 import com.example.pets.adapter.PetAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -38,11 +45,10 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class HomeActivity extends AppCompatActivity {
-
-    FirebaseAuth mAuth;
 
     CoordinatorLayout root;
     LinearLayout overLay;
@@ -78,15 +84,15 @@ public class HomeActivity extends AppCompatActivity {
     TextView bottomSheetHeadingTextView;
     ImageView bottomSheetImageView;
 
+    //firebase objects
+    FirebaseFirestore dB;
+    FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mAuth = FirebaseAuth.getInstance();
-
-        Toast.makeText(this, mAuth.getUid(), Toast.LENGTH_SHORT).show();
 
         //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
@@ -140,6 +146,10 @@ public class HomeActivity extends AppCompatActivity {
         //getting bottom sheet layout
         bottomSheetHeadingTextView = findViewById(R.id.bottomSheet_name_textView);
         bottomSheetImageView = findViewById(R.id.bottomSheet_imageView);
+
+        //getting firebase instances
+        mAuth = FirebaseAuth.getInstance();
+        dB = FirebaseFirestore.getInstance();
 
 
         //setting recycler view
@@ -236,7 +246,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 IntentIntegrator integrator = new IntentIntegrator(HomeActivity.this);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
                 integrator.setPrompt("Scan a barcode");
                 integrator.setBeepEnabled(false);
                 integrator.setBarcodeImageEnabled(true);
@@ -463,10 +473,40 @@ public class HomeActivity extends AppCompatActivity {
             if(result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                updateServerDatabase(result.getContents());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    void updateServerDatabase(String jsonResponse){
+        Gson gson = new Gson();
+        Pet pet = gson.fromJson(jsonResponse, Pet.class);
+        DocumentReference reference = dB.collection("user").document(mAuth.getUid());
+        
+
+        reference.collection("meta-data").document("value").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                reference.collection("data")
+                        .document("" + documentSnapshot.get("size"))
+                        .set(pet).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(HomeActivity.this, "Data added", Toast.LENGTH_LONG).show();
+                            reference.collection("meta-data").document("value").update("size", documentSnapshot.getLong("size") + 1);
+                        } else {
+                            Toast.makeText(HomeActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+            }
+        });
+
+    }
+
 }
