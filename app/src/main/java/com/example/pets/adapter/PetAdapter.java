@@ -50,10 +50,12 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
     public void add(Pet pet){
         pets.add(pet);
+        notifyDataSetChanged();
     }
 
     public void addAll(List<Pet> pets){
-        pets.addAll(pets);
+        this.pets.addAll(pets);
+        notifyDataSetChanged();
     }
 
     public Pet get(int pos){

@@ -27,7 +27,7 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/circle"
+            android:src="@drawable/ic_dog"
             android:layout_margin="16dp"
             android:scaleType="centerCrop"/>
 

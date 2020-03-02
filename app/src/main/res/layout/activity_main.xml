@@ -40,7 +40,8 @@
                     android:layout_gravity="top|start"
                     android:background="@drawable/circle_accent"
                     android:src="@drawable/ic_drawer_open_thick"
-                    android:layout_margin="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="32dp"
                     android:alpha="1" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton

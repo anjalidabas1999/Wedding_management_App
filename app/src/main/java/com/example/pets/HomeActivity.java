@@ -14,8 +14,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.BounceInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ import com.example.pets.Classes.Pet;
 import com.example.pets.account.LoginActivity;
 import com.example.pets.adapter.PetAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -36,8 +38,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -45,7 +48,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -73,8 +76,6 @@ public class HomeActivity extends AppCompatActivity {
 
     PetAdapter adapter;
 
-    ArrayList<Pet> db;
-
     //drawer
     LinearLayout accountsMenuItem;
     LinearLayout settingsMenuItem;
@@ -94,29 +95,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-
-        db = new ArrayList<>();
-
-        db.add(new Pet("Tom", "Breed", "20 Feb 2020"));
-        db.add(new Pet("Tiger", "Chihuahua", "01 Jan 2008"));
-        db.add(new Pet("Browny", "German", "29 Feb 2018"));
-        db.add(new Pet("Tommy", "Anhbdd", "13 Aug 2015"));
-        db.add(new Pet("Guchchu", "Pagal", "20 Nov 2020"));
-        db.add(new Pet("Tom", "Breed", "20 Mar 2019"));
-        db.add(new Pet("Tom", "Breed", "20 Feb 2020"));
-        db.add(new Pet("Tiger", "Chihuahua", "01 Jan 2008"));
-        db.add(new Pet("Browny", "German", "29 Feb 2018"));
-        db.add(new Pet("Tommy", "Anhbdd", "13 Aug 2015"));
-        db.add(new Pet("Guchchu", "Pagal", "20 Nov 2020"));
-        db.add(new Pet("Tom", "Breed", "20 Mar 2019"));
-        db.add(new Pet("Tom", "Breed", "20 Feb 2020"));
-        db.add(new Pet("Tiger", "Chihuahua", "01 Jan 2008"));
-        db.add(new Pet("Browny", "German", "29 Feb 2018"));
-        db.add(new Pet("Tommy", "Anhbdd", "13 Aug 2015"));
-        db.add(new Pet("Guchchu", "Pagal", "20 Nov 2020"));
-        db.add(new Pet("Tom", "Breed", "20 Mar 2019"));
 
         setUp();
 
@@ -142,7 +123,6 @@ public class HomeActivity extends AppCompatActivity {
         //slideButton = findViewById(R.id.homeActivity_slide_button);
 
 
-
         //getting bottom sheet layout
         bottomSheetHeadingTextView = findViewById(R.id.bottomSheet_name_textView);
         bottomSheetImageView = findViewById(R.id.bottomSheet_imageView);
@@ -151,12 +131,18 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         dB = FirebaseFirestore.getInstance();
 
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+                .setPersistenceEnabled(true)
+                .build();
+        dB.setFirestoreSettings(settings);
+
 
         //setting recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
         recyclerView.setHasFixedSize(false);
 
-        adapter = new PetAdapter(db, new View.OnClickListener() {
+        adapter = new PetAdapter(new ArrayList<>(), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateBottomSheet(adapter.get(recyclerView.getChildLayoutPosition(view)));
@@ -253,6 +239,8 @@ public class HomeActivity extends AppCompatActivity {
                 integrator.initiateScan();
             }
         });
+
+        fetchDataFromServer();
     }
 
     void setUpBottomSheet(){
@@ -484,7 +472,7 @@ public class HomeActivity extends AppCompatActivity {
         Gson gson = new Gson();
         Pet pet = gson.fromJson(jsonResponse, Pet.class);
         DocumentReference reference = dB.collection("user").document(mAuth.getUid());
-        
+
 
         reference.collection("meta-data").document("value").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -507,6 +495,24 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    void fetchDataFromServer(){
+        dB.collection("user").document(mAuth.getUid()).collection("data").get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<Pet> pets = queryDocumentSnapshots.toObjects(Pet.class);
+                        adapter.addAll(pets);
+                    }
+                });
     }
 
 }
