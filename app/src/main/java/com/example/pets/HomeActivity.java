@@ -37,7 +37,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
@@ -242,7 +244,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        //fetchDataFromServer();
+        fetchDataFromServer();
     }
 
     void setUpBottomSheet(){
@@ -473,50 +475,99 @@ public class HomeActivity extends AppCompatActivity {
     void updateServerDatabase(String jsonResponse){
         Gson gson = new Gson();
         Pet pet = gson.fromJson(jsonResponse, Pet.class);
+        jsonResponse = gson.toJson(pet);
         DocumentReference reference = dB.collection("user").document(mAuth.getUid());
 
 
+        String finalJsonResponse = gson.toJson(pet);
 
+        reference.collection("data").document("data").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                DocumentReference currentDatabase = reference.collection("data").document("data");
+                int counter = documentSnapshot.getLong("size").intValue();
+
+                currentDatabase
+                        .update(""+counter, finalJsonResponse)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(HomeActivity.this, "Data added", Toast.LENGTH_LONG).show();
+                                    currentDatabase.update("size", counter + 1);
+                                } else {
+                                    Toast.makeText(HomeActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+            }
+        });
+
+/*
         reference.collection("meta-data").document("value").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                reference.collection("data")
-                        .document("0")
-                        .update("" + documentSnapshot.get("size"), jsonResponse)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(HomeActivity.this, "Data added", Toast.LENGTH_LONG).show();
-                            reference.collection("meta-data").document("value").update("size", documentSnapshot.getLong("size") + 1);
-                        } else {
-                            Toast.makeText(HomeActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                DocumentReference currentDatabase = reference.collection("data").document("data");
+                int counter = documentSnapshot.getLong("size").intValue();
 
+                if(counter == 0){
+
+                    currentDatabase
+                            .set(new HashMap<String, String>(){
+                                {
+                                    put(""+counter, finalJsonResponse);
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(HomeActivity.this, "Database initiated", Toast.LENGTH_LONG).show();
+                                reference.collection("meta-data").document("value").update("size", documentSnapshot.getLong("size") + 1);
+                            } else {
+                                Toast.makeText(HomeActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }else{
+
+                    currentDatabase
+                            .update(""+counter, finalJsonResponse)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(HomeActivity.this, "Data added", Toast.LENGTH_LONG).show();
+                                        reference.collection("meta-data").document("value").update("size", documentSnapshot.getLong("size") + 1);
+                                    } else {
+                                        Toast.makeText(HomeActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+
+                }
             }
         });
+*/
 
     }
 
     void fetchDataFromServer(){
-        dB.collection("user").document(mAuth.getUid()).collection("data").get()
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+        Gson gson = new Gson();
+        dB.collection("user").document(mAuth.getUid()).collection("data").document("data")
+               .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                   @Override
+                   public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                       int size= documentSnapshot.getLong("size").intValue();
+                       for(int i=0; i<size; i++){
+                           String currentPet = documentSnapshot.getString(""+i);
+                           Pet pet = gson.fromJson(currentPet, Pet.class);
+                           adapter.add(pet);
+                       }
 
-                    }
-                })
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<Pet> pets = queryDocumentSnapshots.toObjects(Pet.class);
-                        adapter.addAll(pets);
-                    }
-                });
+                   }
+               });
+
     }
 
 }
