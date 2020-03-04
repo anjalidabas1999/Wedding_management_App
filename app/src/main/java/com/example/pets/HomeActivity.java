@@ -48,7 +48,9 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -240,7 +242,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        fetchDataFromServer();
+        //fetchDataFromServer();
     }
 
     void setUpBottomSheet(){
@@ -474,13 +476,15 @@ public class HomeActivity extends AppCompatActivity {
         DocumentReference reference = dB.collection("user").document(mAuth.getUid());
 
 
+
         reference.collection("meta-data").document("value").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                 reference.collection("data")
-                        .document("" + documentSnapshot.get("size"))
-                        .set(pet).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .document("0")
+                        .update("" + documentSnapshot.get("size"), jsonResponse)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
