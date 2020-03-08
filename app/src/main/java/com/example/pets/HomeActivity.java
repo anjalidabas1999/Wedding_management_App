@@ -478,7 +478,6 @@ public class HomeActivity extends AppCompatActivity {
         jsonResponse = gson.toJson(pet);
         DocumentReference reference = dB.collection("user").document(mAuth.getUid());
 
-
         String finalJsonResponse = gson.toJson(pet);
 
         reference.collection("data").document("data").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -503,58 +502,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-/*
-        reference.collection("meta-data").document("value").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-
-                DocumentReference currentDatabase = reference.collection("data").document("data");
-                int counter = documentSnapshot.getLong("size").intValue();
-
-                if(counter == 0){
-
-                    currentDatabase
-                            .set(new HashMap<String, String>(){
-                                {
-                                    put(""+counter, finalJsonResponse);
-                                }
-                            }).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(HomeActivity.this, "Database initiated", Toast.LENGTH_LONG).show();
-                                reference.collection("meta-data").document("value").update("size", documentSnapshot.getLong("size") + 1);
-                            } else {
-                                Toast.makeText(HomeActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                }else{
-
-                    currentDatabase
-                            .update(""+counter, finalJsonResponse)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(HomeActivity.this, "Data added", Toast.LENGTH_LONG).show();
-                                        reference.collection("meta-data").document("value").update("size", documentSnapshot.getLong("size") + 1);
-                                    } else {
-                                        Toast.makeText(HomeActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            });
-
-                }
-            }
-        });
-*/
-
     }
 
     void fetchDataFromServer(){
         Gson gson = new Gson();
         dB.collection("user").document(mAuth.getUid()).collection("data").document("data")
+
                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                    @Override
                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -564,7 +517,6 @@ public class HomeActivity extends AppCompatActivity {
                            Pet pet = gson.fromJson(currentPet, Pet.class);
                            adapter.add(pet);
                        }
-
                    }
                });
 
