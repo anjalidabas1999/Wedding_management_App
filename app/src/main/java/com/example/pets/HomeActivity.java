@@ -14,22 +14,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pets.Classes.Pet;
 import com.example.pets.account.LoginActivity;
 import com.example.pets.adapter.PetAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -41,8 +38,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -51,9 +46,6 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -87,7 +79,8 @@ public class HomeActivity extends AppCompatActivity {
     LinearLayout logOutMenuItem;
 
     //bottomsheet
-    TextView bottomSheetHeadingTextView;
+    EditText bottomSheetNameEditText;
+    EditText bottomSheetDateAddedEditText;
     ImageView bottomSheetImageView;
     TextInputLayout bottomSheetBreedTextInputLayout;
     TextInputLayout bottomSheetDescriptionTextInputLayout;
@@ -111,8 +104,6 @@ public class HomeActivity extends AppCompatActivity {
         setUp();
 
 
-
-
     }
 
     void setUp(){
@@ -133,7 +124,8 @@ public class HomeActivity extends AppCompatActivity {
 
 
         //getting bottom sheet layout
-        bottomSheetHeadingTextView = findViewById(R.id.bottomSheet_name_textView);
+        bottomSheetNameEditText = findViewById(R.id.bottomSheet_name_editText);
+        bottomSheetDateAddedEditText = findViewById(R.id.bottomSheet_dateAdded_editText);
         bottomSheetImageView = findViewById(R.id.bottomSheet_imageView);
         bottomSheetBreedTextInputLayout = findViewById(R.id.bottomSheet_breed_textInputLayout);
         bottomSheetDescriptionTextInputLayout = findViewById(R.id.bottomSheet_description_textInputLayout);
@@ -164,17 +156,6 @@ public class HomeActivity extends AppCompatActivity {
         //setting drawer layout
         setUpDrawer();
 
-        //setting on click listeners
-        /*slideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                overLay.setVisibility(View.VISIBLE);
-
-                ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(root, "translationX", 700f);
-                objectAnimator1.setDuration(500);
-                objectAnimator1.start();
-            }
-        });*/
 
         drawerOpener.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,7 +272,8 @@ public class HomeActivity extends AppCompatActivity {
 
     void updateBottomSheet(final Pet pet){
         overLay.setVisibility(View.VISIBLE);
-        bottomSheetHeadingTextView.setText(pet.getName());
+        bottomSheetNameEditText.setText(pet.getName());
+        bottomSheetDateAddedEditText.setText(pet.getDateAdded());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         bottomSheetHealthTextInputLayout.getEditText().setText(pet.getHealthDesc());
