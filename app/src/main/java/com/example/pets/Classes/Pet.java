@@ -2,6 +2,7 @@ package com.example.pets.Classes;
 
 public class Pet {
 
+    int id;
     String quantity;
     String name;
     String breed;
@@ -74,5 +75,13 @@ public class Pet {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

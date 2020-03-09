@@ -478,13 +478,16 @@ public class HomeActivity extends AppCompatActivity {
         jsonResponse = gson.toJson(pet);
         DocumentReference reference = dB.collection("user").document(mAuth.getUid());
 
-        String finalJsonResponse = gson.toJson(pet);
+
 
         reference.collection("data").document("data").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 DocumentReference currentDatabase = reference.collection("data").document("data");
                 int counter = documentSnapshot.getLong("size").intValue();
+                pet.setId(counter);
+
+                String finalJsonResponse = gson.toJson(pet);
 
                 currentDatabase
                         .update(""+counter, finalJsonResponse)
