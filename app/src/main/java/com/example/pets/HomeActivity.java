@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.pets.Classes.Pet;
 import com.example.pets.account.LoginActivity;
 import com.example.pets.adapter.PetAdapter;
+import com.example.pets.handler.NewPetHandler;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -440,12 +441,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     void showNewPetDialog(){
-        Dialog dialog = new Dialog(HomeActivity.this);
-        dialog.setContentView(R.layout.new_pet_entry_layout);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        dialog.setCancelable(false);
-        dialog.show();
+        NewPetHandler petHandler = new NewPetHandler(this, HomeActivity.this);
+        petHandler.init();
     }
 
     Bitmap generateQR(Pet pet){

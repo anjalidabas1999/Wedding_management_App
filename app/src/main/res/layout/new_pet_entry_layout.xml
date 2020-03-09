@@ -29,6 +29,7 @@
         android:textSize="24sp"/>
 
     <RelativeLayout
+        android:id="@+id/newPetEntry_editTextContainer_relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@id/newPetEntry_currentTitle_textView"
@@ -36,6 +37,7 @@
         android:layout_margin="32dp">
 
         <EditText
+            android:id="@+id/newPetEntry_inputText_editText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
@@ -44,6 +46,43 @@
             android:textSize="32sp"
             android:textColorHint="@color/colorAccent"
             android:background="@color/zxing_transparent"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:layout_below="@id/newPetEntry_editTextContainer_relativeLayout">
+
+        <ImageButton
+            android:id="@+id/newPetEntry_previous_imageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_arrow_back_white"
+            android:background="@drawable/circle"
+            android:layout_alignParentStart="true"/>
+
+        <ImageButton
+            android:id="@+id/newPetEntry_cancel_imageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_close_white"
+            android:background="@drawable/circle"
+            android:layout_centerInParent="true"/>
+
+
+        <ImageButton
+            android:id="@+id/newPetEntry_next_imageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_arrow_forward_white"
+            android:background="@drawable/circle"
+            android:layout_alignParentEnd="true"/>
+
+
+
+
 
     </RelativeLayout>
 
