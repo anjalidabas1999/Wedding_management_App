@@ -34,6 +34,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -88,6 +89,10 @@ public class HomeActivity extends AppCompatActivity {
     //bottomsheet
     TextView bottomSheetHeadingTextView;
     ImageView bottomSheetImageView;
+    TextInputLayout bottomSheetBreedTextInputLayout;
+    TextInputLayout bottomSheetDescriptionTextInputLayout;
+    TextInputLayout bottomSheetHealthTextInputLayout;
+
 
     //firebase objects
     FirebaseFirestore dB;
@@ -130,16 +135,14 @@ public class HomeActivity extends AppCompatActivity {
         //getting bottom sheet layout
         bottomSheetHeadingTextView = findViewById(R.id.bottomSheet_name_textView);
         bottomSheetImageView = findViewById(R.id.bottomSheet_imageView);
+        bottomSheetBreedTextInputLayout = findViewById(R.id.bottomSheet_breed_textInputLayout);
+        bottomSheetDescriptionTextInputLayout = findViewById(R.id.bottomSheet_description_textInputLayout);
+        bottomSheetHealthTextInputLayout = findViewById(R.id.bottomSheet_healthStatus_textInputLayout);
 
         //getting firebase instances
         mAuth = FirebaseAuth.getInstance();
         dB = FirebaseFirestore.getInstance();
 
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
-                .setPersistenceEnabled(true)
-                .build();
-        dB.setFirestoreSettings(settings);
 
 
         //setting recycler view
@@ -290,6 +293,10 @@ public class HomeActivity extends AppCompatActivity {
         overLay.setVisibility(View.VISIBLE);
         bottomSheetHeadingTextView.setText(pet.getName());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+        bottomSheetHealthTextInputLayout.getEditText().setText(pet.getHealthDesc());
+        bottomSheetDescriptionTextInputLayout.getEditText().setText(pet.getDescription());
+        bottomSheetBreedTextInputLayout.getEditText().setText(pet.getBreed());
 
 
         petShareButton.setOnClickListener(new View.OnClickListener() {
@@ -515,11 +522,15 @@ public class HomeActivity extends AppCompatActivity {
                    @Override
                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                        int size= documentSnapshot.getLong("size").intValue();
-                       for(int i=0; i<size; i++){
+                       int i = 0;
+                       while(size>=1 && i<size){
                            String currentPet = documentSnapshot.getString(""+i);
                            Pet pet = gson.fromJson(currentPet, Pet.class);
                            adapter.add(pet);
+                           i++;
                        }
+
+
                    }
                });
 

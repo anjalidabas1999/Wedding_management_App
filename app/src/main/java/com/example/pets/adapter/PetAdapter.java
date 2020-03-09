@@ -41,6 +41,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
         holder.petName.setText(currentPet.getName());
         holder.petBreed.setText(currentPet.getBreed());
         holder.date.setText(currentPet.getDateAdded());
+
     }
 
     @Override

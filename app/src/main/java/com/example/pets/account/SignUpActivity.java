@@ -40,6 +40,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+
 public class SignUpActivity extends AppCompatActivity {
 
     final int PROFILE_IMAGE_TAG = 100;
@@ -130,10 +132,10 @@ public class SignUpActivity extends AppCompatActivity {
                 ){
                     signUp();
                 }else{
-                    setPage1();
+                    /*setPage1();
                     nameAndPasswordEditText.setText(mName != "" && mName != null? mName: "");
                     userEmailAndConfirmPasswordEditText.setText(mUserName != "" && mUserName != null? mUserName: "");
-                    nameAndPasswordEditText.requestFocus();
+                    nameAndPasswordEditText.requestFocus();*/
                 }
                 return true;
             }
@@ -203,6 +205,9 @@ public class SignUpActivity extends AppCompatActivity {
         //updating the state of views
         currentPageTextView.setText("1");
 
+        nameAndPasswordEditText.setText(mName);
+        userEmailAndConfirmPasswordEditText.setText(mUserName);
+
         signUpButton.setText("Next");
 
         signUpButtonInfo.setVisibility(View.INVISIBLE);
@@ -215,10 +220,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         nameAndPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         userEmailAndConfirmPasswordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-
-
-        nameAndPasswordEditText.setText(null);
-        userEmailAndConfirmPasswordEditText.setText(null);
 
 
         nameAndPasswordEditText.setCompoundDrawablesWithIntrinsicBounds(
@@ -239,6 +240,9 @@ public class SignUpActivity extends AppCompatActivity {
         //updating the state of views
         currentPageTextView.setText("2");
 
+        nameAndPasswordEditText.setText(mPassword);
+        userEmailAndConfirmPasswordEditText.setText(mConfirmPassword);
+
         signUpButton.setText("Previous");
 
         signUpButtonInfo.setVisibility(View.VISIBLE);
@@ -252,9 +256,6 @@ public class SignUpActivity extends AppCompatActivity {
         nameAndPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         userEmailAndConfirmPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-
-        nameAndPasswordEditText.setText(null);
-        userEmailAndConfirmPasswordEditText.setText(null);
 
 
         nameAndPasswordEditText.setCompoundDrawablesWithIntrinsicBounds(
@@ -300,8 +301,22 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
-                        dialog.dismiss();
+
+                        mFireStore.collection("user").document(uid)
+                                .collection("data").document("data")
+                                .set(new HashMap<String, Integer>(){
+                                    {
+                                        put("size", 0);
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                                dialog.dismiss();
+                            }
+                        });
+
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -310,6 +325,7 @@ public class SignUpActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
     }
 
     void fetchDataFromCurrentState(){
@@ -325,6 +341,7 @@ public class SignUpActivity extends AppCompatActivity {
     void setUpDialog(){
         dialog.setContentView(R.layout.progress_dialog);
 
+        dialog.setCancelable(false);
         ProgressBar progressBar = dialog.findViewById(R.id.dialog_progressBar);
 
         Sprite anim = new ChasingDots();

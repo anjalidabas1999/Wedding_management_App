@@ -3,7 +3,6 @@ package com.example.pets.Classes;
 public class Pet {
 
     int id;
-    String quantity;
     String name;
     String breed;
     String description;
@@ -11,8 +10,7 @@ public class Pet {
     String healthDesc;
 
 
-    public Pet(String quantity, String name, String breed, String description, String dateAdded, String healthDesc) {
-        this.quantity = quantity;
+    public Pet(String name, String breed, String description, String dateAdded, String healthDesc) {
         this.name = name;
         this.breed = breed;
         this.description = description;
@@ -67,14 +65,6 @@ public class Pet {
 
     public void setHealthDesc(String healthDesc) {
         this.healthDesc = healthDesc;
-    }
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
     }
 
     public int getId() {

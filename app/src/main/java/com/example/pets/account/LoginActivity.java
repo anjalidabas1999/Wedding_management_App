@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void setUpDialog(){
         dialog.setContentView(R.layout.progress_dialog);
-
+        dialog.setCancelable(false);
         ProgressBar progressBar = dialog.findViewById(R.id.dialog_progressBar);
 
         Sprite anim = new ChasingDots();

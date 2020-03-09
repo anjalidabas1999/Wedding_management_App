@@ -84,11 +84,11 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/bottomSheet_ownerName_textInputLayout"
+            android:id="@+id/bottomSheet_breed_textInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/bottomSheet_imageView_container_coordinatorLayout"
-            android:hint="OWNER NAME"
+            android:hint="Breed"
             android:textColorHint="@color/colorAccent"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:textSize="20dp"
-                android:text="Danish Jamal"
+                android:text="Pagall"
                 android:textColor="@color/white"
                 android:background="#00000000"
                 android:enabled="false"/>
@@ -110,7 +110,7 @@
             android:id="@+id/bottomSheet_description_textInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/bottomSheet_ownerName_textInputLayout"
+            android:layout_below="@id/bottomSheet_breed_textInputLayout"
             android:hint="Description"
             android:textColorHint="@color/colorAccent"
             android:paddingLeft="16dp"
