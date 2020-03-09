@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#000">
+
+    <TextView
+        android:id="@+id/newPetEntry_heading_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="New Pet"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        android:layout_marginTop="64dp" />
+
+    <TextView
+        android:id="@+id/newPetEntry_currentTitle_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newPetEntry_heading_textView"
+        android:background="@drawable/top_round_new_entry_box"
+        android:layout_margin="32dp"
+        android:text="Name"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="24sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/newPetEntry_currentTitle_textView"
+        android:background="@drawable/bottom_round_new_entry_box"
+        android:layout_margin="32dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:hint="Enter here"
+            android:padding="32dp"
+            android:textSize="32sp"
+            android:textColorHint="@color/colorAccent"
+            android:background="@color/zxing_transparent"/>
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

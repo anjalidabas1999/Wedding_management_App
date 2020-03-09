@@ -228,6 +228,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        manualNewEntryFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showNewPetDialog();
+            }
+        });
+
         fetchDataFromServer();
     }
 
@@ -284,7 +291,7 @@ public class HomeActivity extends AppCompatActivity {
         petShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(pet);
+                showQrDialog(pet);
             }
         });
 
@@ -424,11 +431,20 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    void showDialog(Pet pet){
+    void showQrDialog(Pet pet){
         Dialog dialog = new Dialog(HomeActivity.this);
 //        View v = LayoutInflater.from(HomeActivity.this).inflate(R.layout.qr_code_layout, false);
         dialog.setContentView(R.layout.qr_code_layout);
         ((ImageView)dialog.findViewById(R.id.dialog_imageView)).setImageBitmap(generateQR(pet));
+        dialog.show();
+    }
+
+    void showNewPetDialog(){
+        Dialog dialog = new Dialog(HomeActivity.this);
+        dialog.setContentView(R.layout.new_pet_entry_layout);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        dialog.setCancelable(false);
         dialog.show();
     }
 
