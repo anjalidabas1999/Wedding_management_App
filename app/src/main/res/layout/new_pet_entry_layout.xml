@@ -5,6 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#000">
 
+
+
     <TextView
         android:id="@+id/newPetEntry_heading_textView"
         android:layout_width="wrap_content"
@@ -28,6 +30,8 @@
         android:textStyle="bold"
         android:textSize="24sp"/>
 
+
+
     <RelativeLayout
         android:id="@+id/newPetEntry_editTextContainer_relativeLayout"
         android:layout_width="match_parent"
@@ -48,6 +52,7 @@
             android:background="@color/zxing_transparent"/>
 
     </RelativeLayout>
+
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -81,10 +86,10 @@
             android:layout_alignParentEnd="true"/>
 
 
-
-
-
     </RelativeLayout>
+
+
+    <include layout="@layout/yes_no_dialog_layout"/>
 
 
 
