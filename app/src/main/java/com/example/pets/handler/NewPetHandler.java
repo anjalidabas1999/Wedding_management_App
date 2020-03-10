@@ -65,37 +65,38 @@ public class NewPetHandler {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Dialog d = new Dialog(activity);
-                d.setContentView(R.layout.yes_no_dialog_layout);
-                d.setCancelable(false);
-                d.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-                (d.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        d.dismiss();
-                    }
-                });
-
-                (d.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        d.dismiss();
-                        dialog.dismiss();
-                    }
-                });
-
-                d.show();
-
-
+                setUpAlertDialog();
             }
         });
 
 
 
     }
-    
+
+    void setUpAlertDialog(){
+        Dialog d = new Dialog(activity);
+        d.setContentView(R.layout.yes_no_dialog_layout);
+        d.setCancelable(false);
+        d.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        (d.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                d.dismiss();
+            }
+        });
+
+        (d.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                d.dismiss();
+                dialog.dismiss();
+            }
+        });
+
+        d.show();
+    }
+
     public void init(){
         dialog.show();
     }
