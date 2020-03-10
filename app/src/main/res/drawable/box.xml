@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <path
-        android:fillColor="#0000FF"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="4"
-        android:pathData="M100,100 L300,100 L200,300 z"/>
 
-</vector>
+    <item android:height="100dp" android:width="100dp" >
+
+        <rotate
+            android:fromDegrees="45"
+            android:pivotX="100%"
+            android:pivotY="30%"
+            >
+            <shape android:shape="rectangle">
+                <solid android:color="@color/colorAccent" />
+            </shape>
+
+        </rotate>
+    </item>
+
+    <item android:bottom="129dp" android:height="50dp" android:width="100dp" >
+
+        <shape android:shape="rectangle" >
+            <solid android:color="#000" />
+
+        </shape>
+
+    </item>
+
+
+
+
+
+
+</layer-list>

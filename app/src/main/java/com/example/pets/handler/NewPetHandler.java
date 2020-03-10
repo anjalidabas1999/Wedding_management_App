@@ -1,9 +1,12 @@
 package com.example.pets.handler;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.Image;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -49,6 +52,30 @@ public class NewPetHandler {
         previousButton = dialog.findViewById(R.id.newPetEntry_previous_imageButton);
         cancelButton = dialog.findViewById(R.id.newPetEntry_cancel_imageButton);
         nextButton = dialog.findViewById(R.id.newPetEntry_next_imageButton);
+
+        previousButton.setVisibility(View.GONE);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog a = new AlertDialog.Builder(context).setMessage("Are you sure")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if(i == DialogInterface.BUTTON_POSITIVE){
+                                    dialog.dismiss();
+                                }
+                            }
+                        }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if(i == DialogInterface.BUTTON_NEGATIVE){
+
+                                }
+                            }
+                        }).show();
+            }
+        });
 
 
     }
