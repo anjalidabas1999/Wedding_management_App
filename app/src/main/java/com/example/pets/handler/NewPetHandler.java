@@ -26,7 +26,8 @@ public class NewPetHandler {
     Context context;
     Activity activity;
 
-    String[] data = {"", "", "", ""};
+    String[] label = {"Name", "Breed", "Description", "Health Status"};
+    String[] data = {"", "", "", ""};// 0: name, 1: breed, 2: description, 3: health_status
 
     int currentPage = 0;
 
@@ -70,6 +71,8 @@ public class NewPetHandler {
         });
 
 
+        setUpNextClickButton();
+        setUpPreviousClickButton();
 
     }
 
@@ -95,6 +98,44 @@ public class NewPetHandler {
         });
 
         d.show();
+    }
+
+    void setUpNextClickButton(){
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentPage==2){
+                    nextButton.setVisibility(View.GONE);
+                }
+                if(currentPage==0){
+                    previousButton.setVisibility(View.VISIBLE);
+                }
+
+                data[currentPage] = textInputEditText.getText().toString();
+                textInputEditText.setText(data[++currentPage]);
+                headingTextView.setText(label[currentPage]);
+
+            }
+        });
+    }
+
+    void setUpPreviousClickButton(){
+        previousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentPage==1){
+                    previousButton.setVisibility(View.GONE);
+                }
+                if(currentPage==3){
+                    nextButton.setVisibility(View.VISIBLE);
+                }
+
+                data[currentPage] = textInputEditText.getText().toString();
+                textInputEditText.setText(data[--currentPage]);
+                headingTextView.setText(label[currentPage]);
+
+            }
+        });
     }
 
     public void init(){
