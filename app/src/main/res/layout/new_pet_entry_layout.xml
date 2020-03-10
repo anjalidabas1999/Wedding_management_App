@@ -89,7 +89,10 @@
     </RelativeLayout>
 
 
-    <include layout="@layout/yes_no_dialog_layout"/>
+    <include
+        android:visibility="gone"
+        android:id="@+id/newPetEntry_confirmDialog_include"
+        layout="@layout/yes_no_dialog_layout"/>
 
 
 

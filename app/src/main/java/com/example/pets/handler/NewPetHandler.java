@@ -1,5 +1,6 @@
 package com.example.pets.handler;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,10 +8,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.media.Image;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pets.HomeActivity;
 import com.example.pets.R;
@@ -33,6 +37,8 @@ public class NewPetHandler {
     ImageButton cancelButton;
     ImageButton nextButton;
 
+    View confirmDialogLayout;
+
     public NewPetHandler(Context context, Activity activity) {
         this.context = context;
         this.activity = activity;
@@ -52,34 +58,44 @@ public class NewPetHandler {
         previousButton = dialog.findViewById(R.id.newPetEntry_previous_imageButton);
         cancelButton = dialog.findViewById(R.id.newPetEntry_cancel_imageButton);
         nextButton = dialog.findViewById(R.id.newPetEntry_next_imageButton);
+        confirmDialogLayout = dialog.findViewById(R.id.newPetEntry_confirmDialog_include);
 
         previousButton.setVisibility(View.GONE);
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog a = new AlertDialog.Builder(context).setMessage("Are you sure")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if(i == DialogInterface.BUTTON_POSITIVE){
-                                    dialog.dismiss();
-                                }
-                            }
-                        }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if(i == DialogInterface.BUTTON_NEGATIVE){
 
-                                }
-                            }
-                        }).show();
+                Dialog d = new Dialog(activity);
+                d.setContentView(R.layout.yes_no_dialog_layout);
+                d.setCancelable(false);
+                d.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+                (d.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        d.dismiss();
+                    }
+                });
+
+                (d.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        d.dismiss();
+                        dialog.dismiss();
+                    }
+                });
+
+                d.show();
+
+
             }
         });
 
 
-    }
 
+    }
+    
     public void init(){
         dialog.show();
     }
