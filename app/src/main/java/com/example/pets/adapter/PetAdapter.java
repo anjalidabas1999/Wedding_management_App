@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pets.Classes.Pet;
 import com.example.pets.R;
+import com.example.pets.interfaces.ItemListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,15 @@ import java.util.List;
 public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
     ArrayList<Pet> pets;
+    ItemListener itemListener;
 
     private View.OnClickListener mOnClickListener;
 
 
-    public PetAdapter(ArrayList<Pet> pets, View.OnClickListener listener) {
+    public PetAdapter(ArrayList<Pet> pets, View.OnClickListener listener, ItemListener itemListener) {
         this.pets = pets;
         this.mOnClickListener = listener;
+        this.itemListener = itemListener;
     }
 
     @NonNull
@@ -57,6 +60,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
         }
         pets.add(pet);
         notifyDataSetChanged();
+        itemListener.size(pets.size());
     }
 
     public void addAll(List<Pet> pets){

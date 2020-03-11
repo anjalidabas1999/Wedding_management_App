@@ -28,6 +28,7 @@ import com.example.pets.Classes.Pet;
 import com.example.pets.account.LoginActivity;
 import com.example.pets.adapter.PetAdapter;
 import com.example.pets.handler.NewPetHandler;
+import com.example.pets.interfaces.ItemListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -54,15 +55,15 @@ public class HomeActivity extends AppCompatActivity {
 
     CoordinatorLayout root;
     LinearLayout overLay;
+    RelativeLayout backgroundMessageContainer;
 
     BottomSheetBehavior bottomSheetBehavior;
-
-    Button slideButton;
 
     RecyclerView recyclerView;
 
     int fabState = 0; // 0: fab closed, 1:fab opened
     int drawerState = 0; //0: closed, 1:opened
+    int bottomSheetFabState = 0; // 0: edit, 1: save
 
     FloatingActionButton bottomSheetFab;
     FloatingActionButton addNewEntryFab;
@@ -102,9 +103,7 @@ public class HomeActivity extends AppCompatActivity {
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-
         setUp();
-
 
     }
 
@@ -113,6 +112,7 @@ public class HomeActivity extends AppCompatActivity {
         //getting views by id
         root = findViewById(R.id.homeActivity_root_relativeLayout);
         overLay = findViewById(R.id.homeActivity_overlay_linearLayout);
+        backgroundMessageContainer = findViewById(R.id.homeActivity_emptyListContainer_relativeLayout);
         recyclerView = findViewById(R.id.homeActivity_recyclerView);
         drawerOpener = findViewById(R.id.homeActivity_drawerOpener_imageView);
 
@@ -147,6 +147,15 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 updateBottomSheet(adapter.get(recyclerView.getChildLayoutPosition(view)));
+            }
+        }, new ItemListener() {
+            @Override
+            public void size(int s) {
+                if(s==0){
+                    backgroundMessageContainer.setVisibility(View.VISIBLE);
+                }else{
+                    backgroundMessageContainer.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -246,6 +255,25 @@ public class HomeActivity extends AppCompatActivity {
         addNewEntryFab.animate().rotation(0).setDuration(500).start();
         manualNewEntryFab.animate().translationX(0f).setDuration(500).start();
         scanQrCodeFab.animate().translationY(0f).setDuration(500).start();
+    }
+
+    void changeBottomSheetFabState(){
+        if(bottomSheetFabState == 0){
+            setFabState1();
+        }else{
+            setFabState0();
+
+        }
+    }
+
+    void setBottomSheetFabState0(){
+        // behaviour of button of enabling editing
+
+    }
+
+    void setBottomSheetFabState1(){
+        // behaviour of button of saving changes
+
     }
 
     void setUpBottomSheet(){
