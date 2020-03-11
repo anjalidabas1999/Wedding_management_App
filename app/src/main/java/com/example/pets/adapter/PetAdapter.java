@@ -50,10 +50,13 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
     }
 
     public void add(Pet pet){
-        if(!pets.contains(pet)){
-            pets.add(pet);
-            notifyDataSetChanged();
+        for(Pet p: pets){
+            if(p.getId() == pet.getId()){
+                return;
+            }
         }
+        pets.add(pet);
+        notifyDataSetChanged();
     }
 
     public void addAll(List<Pet> pets){

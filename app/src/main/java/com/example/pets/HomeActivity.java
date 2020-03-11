@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -179,40 +180,10 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         addNewEntryFab.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("RestrictedApi")
+
             @Override
             public void onClick(View view) {
-                if(fabState == 0){
-                    fabState = 1;
-                    overLay.setAlpha(1);
-                    overLay.setVisibility(View.VISIBLE);
-                    manualNewEntryFab.setVisibility(View.VISIBLE);
-                    scanQrCodeFab.setVisibility(View.VISIBLE);
-                    manualNewEntryFab.animate().translationX(-200f).setDuration(500).start();
-                    scanQrCodeFab.animate().translationY(-200f).setDuration(500).start();
-                }else{
-                    fabState = 0;
-                    overLay.setAlpha(0);
-                    overLay.setVisibility(View.INVISIBLE);
-                    manualNewEntryFab.setVisibility(View.GONE);
-                    scanQrCodeFab.setVisibility(View.GONE);
-                    manualNewEntryFab.animate().translationX(0f).setDuration(500).start();
-                    scanQrCodeFab.animate().translationY(0f).setDuration(500).start();
-                    /*manualNewEntryFab.animate().translationX(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            manualNewEntryFab.setVisibility(View.GONE);
-                        }
-                    }).start();
-                    scanQrCodeFab.animate().translationY(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            scanQrCodeFab.setVisibility(View.GONE);
-                        }
-                    }).start();*/
-                }
+                changeFabState();
 
             }
         });
@@ -220,6 +191,7 @@ public class HomeActivity extends AppCompatActivity {
         scanQrCodeFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                changeFabState();
                 IntentIntegrator integrator = new IntentIntegrator(HomeActivity.this);
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
                 integrator.setPrompt("Scan a barcode");
@@ -232,11 +204,48 @@ public class HomeActivity extends AppCompatActivity {
         manualNewEntryFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setFabState0();
                 showNewPetDialog();
             }
         });
 
         fetchDataFromServer();
+    }
+
+    void changeFabState(){
+        if(fabState == 0){
+            setFabState1();
+        }else{
+            setFabState0();
+
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    void setFabState1(){
+        // open fab
+        fabState = 1;
+        overLay.setAlpha(1);
+        overLay.setVisibility(View.VISIBLE);
+        manualNewEntryFab.setVisibility(View.VISIBLE);
+        scanQrCodeFab.setVisibility(View.VISIBLE);
+        addNewEntryFab.animate().rotation(135).setDuration(500).start();
+        manualNewEntryFab.animate().translationX(-200f).setDuration(500).start();
+        scanQrCodeFab.animate().translationY(-200f).setDuration(500).start();
+
+    }
+
+    @SuppressLint("RestrictedApi")
+    void setFabState0(){
+        // close fab
+        fabState = 0;
+        overLay.setAlpha(0);
+        overLay.setVisibility(View.INVISIBLE);
+        manualNewEntryFab.setVisibility(View.GONE);
+        scanQrCodeFab.setVisibility(View.GONE);
+        addNewEntryFab.animate().rotation(0).setDuration(500).start();
+        manualNewEntryFab.animate().translationX(0f).setDuration(500).start();
+        scanQrCodeFab.animate().translationY(0f).setDuration(500).start();
     }
 
     void setUpBottomSheet(){
@@ -518,7 +527,7 @@ public class HomeActivity extends AppCompatActivity {
                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                        int size= documentSnapshot.getLong("size").intValue();
                        int i = 0;
-                       while(size>=1 && i<size){
+                       while(size>=1 && i<size && size>0){
                            String currentPet = documentSnapshot.getString(""+i);
                            Pet pet = gson.fromJson(currentPet, Pet.class);
                            adapter.add(pet);

@@ -24,6 +24,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class NewPetHandler {
 
     Context context;
@@ -204,13 +208,20 @@ public class NewPetHandler {
     }
 
     Pet getPet(){
+        data[3] = textInputEditText.getText().toString();
         Pet pet = new Pet();
         pet.setName(data[0]);
         pet.setBreed(data[1]);
         pet.setDescription(data[2]);
         pet.setHealthDesc(data[3]);
-
+        pet.setDateAdded(getCurrentDate());
         return pet;
+    }
+
+    String getCurrentDate(){
+        Date date = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+        return format.format(date);
     }
 
     public void init(){
