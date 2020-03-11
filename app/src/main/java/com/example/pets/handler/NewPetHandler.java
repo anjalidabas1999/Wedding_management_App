@@ -8,8 +8,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.example.pets.Classes.Pet;
+import com.example.pets.HomeActivity;
 import com.example.pets.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
 public class NewPetHandler {
 
@@ -31,6 +44,8 @@ public class NewPetHandler {
     ImageButton nextButton;
 
     View confirmDialogLayout;
+
+    FirebaseFirestore mFirestore;
 
     public NewPetHandler(Context context, Activity activity) {
         this.context = context;
@@ -58,11 +73,12 @@ public class NewPetHandler {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setUpAlertDialog();
+                alertDialog.show();
             }
         });
 
 
+        setUpAlertDialog();
         setUpNextClickButton();
         setUpPreviousClickButton();
 
@@ -76,10 +92,6 @@ public class NewPetHandler {
         alertDialog.setCancelable(false);
         alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        alertDialog.show();
-    }
-
-    void setUpExitAlertClickListener(){
         (alertDialog.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,6 +99,13 @@ public class NewPetHandler {
             }
         });
 
+        setUpExitAlertClickListener();
+
+    }
+
+    void setUpExitAlertClickListener(){
+
+        ((TextView)alertDialog.findViewById(R.id.yesNo_heading_textView)).setText("Exit?");
         (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,18 +116,13 @@ public class NewPetHandler {
     }
 
     void setUpSubmitAlertClickListener(){
-        (alertDialog.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
 
+        ((TextView)alertDialog.findViewById(R.id.yesNo_heading_textView)).setText("Submit?");
         (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialog.dismiss();
-                dialog.dismiss();
+                Toast.makeText(context, data[0]+data[1]+data[2]+data[3], Toast.LENGTH_SHORT).show();
+                initiateServer();
             }
         });
     }
@@ -120,6 +134,7 @@ public class NewPetHandler {
                 if(currentPage==2){
                     nextButton.setVisibility(View.GONE);
                     cancelButton.setImageResource(R.drawable.ic_check_white_24dp);
+                    setUpSubmitAlertClickListener();
                 }
                 if(currentPage==0){
                     previousButton.setVisibility(View.VISIBLE);
@@ -143,6 +158,7 @@ public class NewPetHandler {
                 if(currentPage==3){
                     nextButton.setVisibility(View.VISIBLE);
                     cancelButton.setImageResource(R.drawable.ic_close_white);
+                    setUpExitAlertClickListener();
                 }
 
                 data[currentPage] = textInputEditText.getText().toString();
@@ -151,6 +167,50 @@ public class NewPetHandler {
 
             }
         });
+    }
+
+    void initiateServer(){
+        mFirestore = FirebaseFirestore.getInstance();
+        DocumentReference reference = mFirestore.collection("user").document((FirebaseAuth.getInstance()).getUid());
+
+        Pet pet = getPet();
+        Gson gson = new Gson();
+
+        reference.collection("data").document("data").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                DocumentReference currentDatabase = reference.collection("data").document("data");
+                int counter = documentSnapshot.getLong("size").intValue();
+                pet.setId(counter);
+
+                String finalJsonResponse = gson.toJson(pet);
+
+                currentDatabase
+                        .update(""+counter, finalJsonResponse)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(activity, "Data added", Toast.LENGTH_LONG).show();
+                                    currentDatabase.update("size", counter + 1);
+                                } else {
+                                    Toast.makeText(activity, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+            }
+        });
+
+    }
+
+    Pet getPet(){
+        Pet pet = new Pet();
+        pet.setName(data[0]);
+        pet.setBreed(data[1]);
+        pet.setDescription(data[2]);
+        pet.setHealthDesc(data[3]);
+
+        return pet;
     }
 
     public void init(){
