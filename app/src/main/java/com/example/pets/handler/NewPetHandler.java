@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import com.example.pets.Classes.Pet;
 import com.example.pets.HomeActivity;
 import com.example.pets.R;
+import com.example.pets.interfaces.AlertClickListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -47,6 +48,8 @@ public class NewPetHandler {
     ImageButton cancelButton;
     ImageButton nextButton;
 
+    AlertHandler alertHandler;
+
     View confirmDialogLayout;
 
     FirebaseFirestore mFirestore;
@@ -77,7 +80,7 @@ public class NewPetHandler {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialog.show();
+                alertHandler.show();
             }
         });
 
@@ -89,19 +92,19 @@ public class NewPetHandler {
     }
 
     void setUpAlertDialog(){
-        alertDialog = new Dialog(activity);
-        alertDialog.setContentView(R.layout.yes_no_dialog_layout);
-        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        alertDialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        alertDialog.setCancelable(false);
-        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-        (alertDialog.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
+        alertHandler = new AlertHandler(context, activity, "Exit?", new AlertClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onNegativeClick() {
+                alertHandler.dismiss();
+            }
+
+            @Override
+            public void onPositiveClick() {
                 alertDialog.dismiss();
+                dialog.dismiss();
             }
         });
+
 
         setUpExitAlertClickListener();
 
@@ -109,26 +112,38 @@ public class NewPetHandler {
 
     void setUpExitAlertClickListener(){
 
-        ((TextView)alertDialog.findViewById(R.id.yesNo_heading_textView)).setText("Exit?");
-        (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
+        alertHandler.setTitle("Exit?");
+        alertHandler.setAlertClickListener(new AlertClickListener() {
             @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
+            public void onNegativeClick() {
+                alertHandler.dismiss();
+            }
+
+            @Override
+            public void onPositiveClick() {
+                alertHandler.dismiss();
                 dialog.dismiss();
             }
         });
+
+
     }
 
     void setUpSubmitAlertClickListener(){
 
-        ((TextView)alertDialog.findViewById(R.id.yesNo_heading_textView)).setText("Submit?");
-        (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
+        alertHandler.setTitle("Submit?");
+        alertHandler.setAlertClickListener(new AlertClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(context, data[0]+data[1]+data[2]+data[3], Toast.LENGTH_SHORT).show();
+            public void onNegativeClick() {
+                alertHandler.dismiss();
+            }
+
+            @Override
+            public void onPositiveClick() {
                 initiateServer();
             }
         });
+
     }
 
     void setUpNextClickButton(){
@@ -197,6 +212,8 @@ public class NewPetHandler {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(activity, "Data added", Toast.LENGTH_LONG).show();
                                     currentDatabase.update("size", counter + 1);
+                                    alertDialog.dismiss();
+                                    dialog.dismiss();
                                 } else {
                                     Toast.makeText(activity, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }

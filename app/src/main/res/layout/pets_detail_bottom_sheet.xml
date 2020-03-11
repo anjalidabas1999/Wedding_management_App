@@ -96,6 +96,7 @@
             android:layout_marginTop="32dp">
 
             <EditText
+                android:id="@+id/bottomSheet_breed_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -115,10 +116,10 @@
             android:textColorHint="@color/colorAccent"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:paddingTop="16dp"
-            app:hintTextAppearance="@style/very_small_textAppearence_Theme">
+            android:paddingTop="16dp">
 
             <EditText
+                android:id="@+id/bottomSheet_description_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -141,10 +142,10 @@
             android:hint="Health"
             android:textColorHint="@color/colorAccent"
             android:padding="16dp"
-            app:hintTextAppearance="@style/very_small_textAppearence_Theme"
             android:layout_marginTop="-12dp">
 
             <EditText
+                android:id="@+id/bottomSheet_healthStatus_editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -156,6 +157,16 @@
                 android:maxLength="70"/>
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/bottomSheet_cancelEditing_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_close_white"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

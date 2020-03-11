@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pets.Classes.Pet;
@@ -76,6 +77,8 @@ public class HomeActivity extends AppCompatActivity {
 
     PetAdapter adapter;
 
+    Dialog alertDialog;
+
     //drawer
     LinearLayout accountsMenuItem;
     LinearLayout settingsMenuItem;
@@ -84,10 +87,13 @@ public class HomeActivity extends AppCompatActivity {
     //bottomsheet
     EditText bottomSheetNameEditText;
     EditText bottomSheetDateAddedEditText;
+    EditText bottomSheetBreedEditText;
+    EditText bottomSheetDescriptionEditText;
+    EditText bottomSheetHealthEditText;
+
     ImageView bottomSheetImageView;
-    TextInputLayout bottomSheetBreedTextInputLayout;
-    TextInputLayout bottomSheetDescriptionTextInputLayout;
-    TextInputLayout bottomSheetHealthTextInputLayout;
+    FloatingActionButton bottomSheetCancelFab;
+
 
 
     //firebase objects
@@ -129,9 +135,12 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetNameEditText = findViewById(R.id.bottomSheet_name_editText);
         bottomSheetDateAddedEditText = findViewById(R.id.bottomSheet_dateAdded_editText);
         bottomSheetImageView = findViewById(R.id.bottomSheet_imageView);
-        bottomSheetBreedTextInputLayout = findViewById(R.id.bottomSheet_breed_textInputLayout);
-        bottomSheetDescriptionTextInputLayout = findViewById(R.id.bottomSheet_description_textInputLayout);
-        bottomSheetHealthTextInputLayout = findViewById(R.id.bottomSheet_healthStatus_textInputLayout);
+        bottomSheetBreedEditText = findViewById(R.id.bottomSheet_breed_editText);
+        bottomSheetDescriptionEditText = findViewById(R.id.bottomSheet_description_editText);
+        bottomSheetHealthEditText = findViewById(R.id.bottomSheet_healthStatus_editText);
+
+        bottomSheetCancelFab = findViewById(R.id.bottomSheet_cancelEditing_fab);
+
 
         //getting firebase instances
         mAuth = FirebaseAuth.getInstance();
@@ -258,23 +267,45 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     void changeBottomSheetFabState(){
-        if(bottomSheetFabState == 0){
-            setFabState1();
-        }else{
-            setFabState0();
 
+        if(bottomSheetFabState == 0){
+            bottomSheetFabState = 1;
+            setBottomSheetFabState_1();
+
+        }else{
+            bottomSheetFabState = 0;
+            setBottomSheetFabState_0();
         }
     }
 
-    void setBottomSheetFabState0(){
-        // behaviour of button of enabling editing
+    @SuppressLint("RestrictedApi")
+    void setBottomSheetFabState_1(){
+        Toast.makeText(HomeActivity.this, "click for edit", Toast.LENGTH_SHORT).show();
+        bottomSheetFab.setImageResource(R.drawable.ic_check_white_24dp);
+        bottomSheetFab.animate().rotation(360).setDuration(500).start();
+        bottomSheetCancelFab.setVisibility(View.VISIBLE);
 
+        makeBottomSheetEditableOrNonEditable(true);
     }
 
-    void setBottomSheetFabState1(){
-        // behaviour of button of saving changes
+    @SuppressLint("RestrictedApi")
+    void setBottomSheetFabState_0(){
+        Toast.makeText(HomeActivity.this, "click for save", Toast.LENGTH_SHORT).show();
+        bottomSheetFab.setImageResource(R.drawable.ic_edit_white_24dp);
+        bottomSheetFab.animate().rotation(0).setDuration(500).start();
+        bottomSheetCancelFab.setVisibility(View.GONE);
 
+        makeBottomSheetEditableOrNonEditable(false);
     }
+
+    void makeBottomSheetEditableOrNonEditable(boolean b){
+        bottomSheetBreedEditText.setEnabled(b);
+        bottomSheetDescriptionEditText.setEnabled(b);
+        bottomSheetHealthEditText.setEnabled(b);
+        bottomSheetNameEditText.setEnabled(b);
+    }
+
+
 
     void setUpBottomSheet(){
         RelativeLayout bottomSheet = findViewById(R.id.linearLayout);
@@ -309,9 +340,19 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(HomeActivity.this, "click", Toast.LENGTH_SHORT).show();
+                changeBottomSheetFabState();
             }
         });
+
+        bottomSheetCancelFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setUpAlertDialog();
+                alertDialog.show();
+            }
+        });
+
+
 
     }
 
@@ -321,9 +362,9 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetDateAddedEditText.setText(pet.getDateAdded());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        bottomSheetHealthTextInputLayout.getEditText().setText(pet.getHealthDesc());
-        bottomSheetDescriptionTextInputLayout.getEditText().setText(pet.getDescription());
-        bottomSheetBreedTextInputLayout.getEditText().setText(pet.getBreed());
+        bottomSheetHealthEditText.setText(pet.getHealthDesc());
+        bottomSheetDescriptionEditText.setText(pet.getDescription());
+        bottomSheetBreedEditText.setText(pet.getBreed());
 
 
         petShareButton.setOnClickListener(new View.OnClickListener() {
@@ -494,6 +535,37 @@ public class HomeActivity extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
+    }
+
+    void setUpAlertDialog(){
+        alertDialog = new Dialog(HomeActivity.this);
+        alertDialog.setContentView(R.layout.yes_no_dialog_layout);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        alertDialog.setCancelable(false);
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        (alertDialog.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+
+        setUpExitAlertClickListener();
+
+    }
+
+    void setUpExitAlertClickListener(){
+
+        ((TextView)alertDialog.findViewById(R.id.yesNo_heading_textView)).setText("Exit?");
+        (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
     }
 
     @Override
