@@ -311,8 +311,9 @@ public class SignUpActivity extends AppCompatActivity {
                                 }).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
                                 dialog.dismiss();
+                                startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                                finish();
                             }
                         });
 
