@@ -212,7 +212,7 @@ public class NewPetHandler {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(activity, "Data added", Toast.LENGTH_LONG).show();
                                     currentDatabase.update("size", counter + 1);
-                                    alertDialog.dismiss();
+                                    alertHandler.dismiss();
                                     dialog.dismiss();
                                 } else {
                                     Toast.makeText(activity, task.getException().getMessage(), Toast.LENGTH_LONG).show();
