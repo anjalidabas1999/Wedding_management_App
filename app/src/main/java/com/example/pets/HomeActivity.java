@@ -28,7 +28,9 @@ import android.widget.Toast;
 import com.example.pets.Classes.Pet;
 import com.example.pets.account.LoginActivity;
 import com.example.pets.adapter.PetAdapter;
+import com.example.pets.handler.AlertHandler;
 import com.example.pets.handler.NewPetHandler;
+import com.example.pets.interfaces.AlertClickListener;
 import com.example.pets.interfaces.ItemListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -77,7 +79,7 @@ public class HomeActivity extends AppCompatActivity {
 
     PetAdapter adapter;
 
-    Dialog alertDialog;
+    AlertHandler alertHandler;
 
     //drawer
     LinearLayout accountsMenuItem;
@@ -93,6 +95,8 @@ public class HomeActivity extends AppCompatActivity {
 
     ImageView bottomSheetImageView;
     FloatingActionButton bottomSheetCancelFab;
+
+    Pet currentPetOpenedInBottomSheet = null;
 
 
 
@@ -266,45 +270,6 @@ public class HomeActivity extends AppCompatActivity {
         scanQrCodeFab.animate().translationY(0f).setDuration(500).start();
     }
 
-    void changeBottomSheetFabState(){
-
-        if(bottomSheetFabState == 0){
-            bottomSheetFabState = 1;
-            setBottomSheetFabState_1();
-
-        }else{
-            bottomSheetFabState = 0;
-            setBottomSheetFabState_0();
-        }
-    }
-
-    @SuppressLint("RestrictedApi")
-    void setBottomSheetFabState_1(){
-        Toast.makeText(HomeActivity.this, "click for edit", Toast.LENGTH_SHORT).show();
-        bottomSheetFab.setImageResource(R.drawable.ic_check_white_24dp);
-        bottomSheetFab.animate().rotation(360).setDuration(500).start();
-        bottomSheetCancelFab.setVisibility(View.VISIBLE);
-
-        makeBottomSheetEditableOrNonEditable(true);
-    }
-
-    @SuppressLint("RestrictedApi")
-    void setBottomSheetFabState_0(){
-        Toast.makeText(HomeActivity.this, "click for save", Toast.LENGTH_SHORT).show();
-        bottomSheetFab.setImageResource(R.drawable.ic_edit_white_24dp);
-        bottomSheetFab.animate().rotation(0).setDuration(500).start();
-        bottomSheetCancelFab.setVisibility(View.GONE);
-
-        makeBottomSheetEditableOrNonEditable(false);
-    }
-
-    void makeBottomSheetEditableOrNonEditable(boolean b){
-        bottomSheetBreedEditText.setEnabled(b);
-        bottomSheetDescriptionEditText.setEnabled(b);
-        bottomSheetHealthEditText.setEnabled(b);
-        bottomSheetNameEditText.setEnabled(b);
-    }
-
 
 
     void setUpBottomSheet(){
@@ -313,6 +278,8 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetBehavior.setPeekHeight(75);
         bottomSheetBehavior.setHideable(false);
 //        bottomSheetBehavior.setFitToContents(false);
+
+        alertHandler = new AlertHandler(this, HomeActivity.this, "",  null);
 
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -347,8 +314,7 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetCancelFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setUpAlertDialog();
-                alertDialog.show();
+                showAlertForCancelButton();
             }
         });
 
@@ -357,6 +323,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     void updateBottomSheet(final Pet pet){
+        currentPetOpenedInBottomSheet = pet;
         overLay.setVisibility(View.VISIBLE);
         bottomSheetNameEditText.setText(pet.getName());
         bottomSheetDateAddedEditText.setText(pet.getDateAdded());
@@ -374,6 +341,114 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    void changeBottomSheetFabState(){
+
+        if(bottomSheetFabState == 0){
+            bottomSheetFabState = 1;
+            setBottomSheetFabState_1();
+
+        }else{
+            bottomSheetFabState = 0;
+            setBottomSheetFabState_0();
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    void setBottomSheetFabState_1(){
+        bottomSheetFab.setImageResource(R.drawable.ic_check_white_24dp);
+        bottomSheetFab.animate().rotation(360).setDuration(500).start();
+        bottomSheetCancelFab.setVisibility(View.VISIBLE);
+
+        bottomSheetFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAlertForUpdateButton();
+            }
+        });
+
+        makeBottomSheetEditableOrNonEditable(true);
+    }
+
+    @SuppressLint("RestrictedApi")
+    void setBottomSheetFabState_0(){
+        bottomSheetFab.setImageResource(R.drawable.ic_edit_white_24dp);
+        bottomSheetFab.animate().rotation(0).setDuration(500).start();
+        bottomSheetCancelFab.setVisibility(View.GONE);
+
+        makeBottomSheetEditableOrNonEditable(false);
+    }
+
+    void makeBottomSheetEditableOrNonEditable(boolean b){
+        bottomSheetBreedEditText.setEnabled(b);
+        bottomSheetDescriptionEditText.setEnabled(b);
+        bottomSheetHealthEditText.setEnabled(b);
+        bottomSheetNameEditText.setEnabled(b);
+    }
+
+    void showAlertForCancelButton(){
+        alertHandler.setTitle("Exit?");
+        alertHandler.setAlertClickListener(new AlertClickListener() {
+            @Override
+            public void onNegativeClick() {
+                alertHandler.dismiss();
+            }
+
+            @Override
+            public void onPositiveClick() {
+                alertHandler.dismiss();
+                changeBottomSheetFabState();
+            }
+        });
+        alertHandler.show();
+    }
+
+    void showAlertForUpdateButton(){
+        alertHandler.setTitle("Save changes?");
+        alertHandler.setAlertClickListener(new AlertClickListener() {
+            @Override
+            public void onNegativeClick() {
+                alertHandler.dismiss();
+            }
+
+            @Override
+            public void onPositiveClick() {
+                updateCurrentPet();
+            }
+        });
+        alertHandler.show();
+    }
+
+    void updateCurrentPet(){
+        if(validateChanges()){
+            currentPetOpenedInBottomSheet.setName(bottomSheetNameEditText.getText().toString());
+            currentPetOpenedInBottomSheet.setBreed(bottomSheetBreedEditText.getText().toString());
+            currentPetOpenedInBottomSheet.setDescription(bottomSheetDescriptionEditText.getText().toString());
+            currentPetOpenedInBottomSheet.setHealthDesc(bottomSheetHealthEditText.getText().toString());
+
+            Gson gson = new Gson();
+            String updatedPet = gson.toJson(currentPetOpenedInBottomSheet);
+
+            dB.collection("user").document(mAuth.getUid()).collection("data").document("data")
+                    .update(""+currentPetOpenedInBottomSheet.getId(), updatedPet).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    adapter.update(currentPetOpenedInBottomSheet.getId(), currentPetOpenedInBottomSheet);
+                    alertHandler.dismiss();
+                    changeBottomSheetFabState();
+                }
+            });
+        }
+    }
+
+    boolean validateChanges(){
+        if(!bottomSheetNameEditText.getText().toString().equals(currentPetOpenedInBottomSheet.getName()) ||
+                !bottomSheetBreedEditText.getText().toString().equals(currentPetOpenedInBottomSheet.getBreed()) ||
+                !bottomSheetDescriptionEditText.getText().toString().equals(currentPetOpenedInBottomSheet.getDescription()) ||
+                !bottomSheetHealthEditText.getText().toString().equals(currentPetOpenedInBottomSheet.getHealthDesc())
+        ){return true;}
+        return false;
     }
 
     void setUpDrawer(){
@@ -537,36 +612,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    void setUpAlertDialog(){
-        alertDialog = new Dialog(HomeActivity.this);
-        alertDialog.setContentView(R.layout.yes_no_dialog_layout);
-        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        alertDialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        alertDialog.setCancelable(false);
-        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        (alertDialog.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
-
-
-        setUpExitAlertClickListener();
-
-    }
-
-    void setUpExitAlertClickListener(){
-
-        ((TextView)alertDialog.findViewById(R.id.yesNo_heading_textView)).setText("Exit?");
-        (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

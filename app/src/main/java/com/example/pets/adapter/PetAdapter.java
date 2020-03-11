@@ -68,6 +68,15 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void update(int id, Pet pet){
+        for(int i=0; i<getItemCount(); i++){
+            if(pets.get(i).getId() == id){
+                pets.set(i, pet);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     public Pet get(int pos){
         return pets.get(pos);
     }
