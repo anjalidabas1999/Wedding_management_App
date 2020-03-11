@@ -1,25 +1,15 @@
 package com.example.pets.handler;
 
-import android.animation.Animator;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.media.Image;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.BounceInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.pets.HomeActivity;
 import com.example.pets.R;
-
-import java.util.ArrayList;
 
 public class NewPetHandler {
 
@@ -32,6 +22,8 @@ public class NewPetHandler {
     int currentPage = 0;
 
     Dialog dialog;
+    Dialog alertDialog;
+
     TextView headingTextView;
     EditText textInputEditText;
     ImageButton previousButton;
@@ -77,27 +69,48 @@ public class NewPetHandler {
     }
 
     void setUpAlertDialog(){
-        Dialog d = new Dialog(activity);
-        d.setContentView(R.layout.yes_no_dialog_layout);
-        d.setCancelable(false);
-        d.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        alertDialog = new Dialog(activity);
+        alertDialog.setContentView(R.layout.yes_no_dialog_layout);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        alertDialog.setCancelable(false);
+        alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        (d.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
+        alertDialog.show();
+    }
+
+    void setUpExitAlertClickListener(){
+        (alertDialog.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                d.dismiss();
+                alertDialog.dismiss();
             }
         });
 
-        (d.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
+        (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                d.dismiss();
+                alertDialog.dismiss();
                 dialog.dismiss();
             }
         });
+    }
 
-        d.show();
+    void setUpSubmitAlertClickListener(){
+        (alertDialog.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                dialog.dismiss();
+            }
+        });
     }
 
     void setUpNextClickButton(){
@@ -106,6 +119,7 @@ public class NewPetHandler {
             public void onClick(View view) {
                 if(currentPage==2){
                     nextButton.setVisibility(View.GONE);
+                    cancelButton.setImageResource(R.drawable.ic_check_white_24dp);
                 }
                 if(currentPage==0){
                     previousButton.setVisibility(View.VISIBLE);
@@ -128,6 +142,7 @@ public class NewPetHandler {
                 }
                 if(currentPage==3){
                     nextButton.setVisibility(View.VISIBLE);
+                    cancelButton.setImageResource(R.drawable.ic_close_white);
                 }
 
                 data[currentPage] = textInputEditText.getText().toString();
