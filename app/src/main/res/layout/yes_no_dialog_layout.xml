@@ -22,6 +22,14 @@
         android:layout_centerInParent="true"
         android:background="@drawable/rounded_button_background_dark">
 
+        <ProgressBar
+            android:id="@+id/yesNo_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:indeterminateDrawable="@drawable/ic_check"/>
+
 
         <ImageButton
             android:id="@+id/yesNo_cancel_imageButton"

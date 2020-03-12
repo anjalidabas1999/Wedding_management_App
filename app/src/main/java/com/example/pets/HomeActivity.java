@@ -377,6 +377,13 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetFab.animate().rotation(0).setDuration(500).start();
         bottomSheetCancelFab.setVisibility(View.GONE);
 
+        bottomSheetFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeBottomSheetFabState();
+            }
+        });
+
         makeBottomSheetEditableOrNonEditable(false);
     }
 
@@ -414,6 +421,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onPositiveClick() {
+                alertHandler.showProgress();
                 updateCurrentPet();
             }
         });
@@ -435,10 +443,15 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     adapter.update(currentPetOpenedInBottomSheet.getId(), currentPetOpenedInBottomSheet);
+                    alertHandler.hideProgress();
                     alertHandler.dismiss();
                     changeBottomSheetFabState();
                 }
             });
+        }else{
+            alertHandler.hideProgress();
+            alertHandler.dismiss();
+            changeBottomSheetFabState();
         }
     }
 

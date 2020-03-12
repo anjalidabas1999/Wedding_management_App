@@ -1,9 +1,12 @@
 package com.example.pets.handler;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,6 +24,7 @@ public class AlertHandler {
     String title;
 
     Dialog alertDialog;
+    ProgressBar progressBar;
 
     public AlertHandler(Context context, Activity activity, String title, AlertClickListener alertClickListener) {
         this.alertClickListener = alertClickListener;
@@ -39,6 +43,8 @@ public class AlertHandler {
         alertDialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         alertDialog.setCancelable(false);
         alertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        progressBar = alertDialog.findViewById(R.id.yesNo_progressBar);
 
         (alertDialog.findViewById(R.id.yesNo_cancel_imageButton)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +102,35 @@ public class AlertHandler {
     public void setTitle(String title) {
         this.title = title;
         updateDialogTitle();
+    }
+
+
+
+    public void showProgress(){
+        this.setTitle("Updating...");
+        progressBar.setVisibility(View.VISIBLE);
+
+        progressBar.animate().rotation(3600).setDuration(3000).setInterpolator(new DecelerateInterpolator()).start();
+
+        (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).animate()
+                .translationX(-100).scaleY(0).scaleX(0).setDuration(500).start();
+
+        (alertDialog.findViewById(R.id.yesNo_cancel_imageButton)).animate()
+                .translationX(100).scaleY(0).scaleX(0).setDuration(500).start();
+    }
+
+    public void hideProgress(){
+       progressBar.setVisibility(View.GONE);
+
+        (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).animate()
+                .translationX(0).scaleY(1).scaleX(1).setDuration(0).start();
+
+        (alertDialog.findViewById(R.id.yesNo_cancel_imageButton)).animate()
+                .translationX(0).scaleY(1).scaleX(1).setDuration(0).start();
+    }
+
+    public void hideProgressWithInfo(){
+        
     }
 
     public void show(){
