@@ -140,6 +140,7 @@ public class NewPetHandler {
 
             @Override
             public void onPositiveClick() {
+                alertHandler.showProgress();
                 initiateServer();
             }
         });
@@ -212,7 +213,9 @@ public class NewPetHandler {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(activity, "Data added", Toast.LENGTH_LONG).show();
                                     currentDatabase.update("size", counter + 1);
-                                    alertHandler.dismiss();
+
+                                    alertHandler.hideProgressWithInfo("Success", 1);
+
                                     dialog.dismiss();
                                 } else {
                                     Toast.makeText(activity, task.getException().getMessage(), Toast.LENGTH_LONG).show();
