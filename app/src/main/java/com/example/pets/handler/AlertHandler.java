@@ -1,12 +1,8 @@
 package com.example.pets.handler;
 
-import android.animation.Animator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -14,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.example.pets.HomeActivity;
 import com.example.pets.R;
 import com.example.pets.interfaces.AlertClickListener;
 

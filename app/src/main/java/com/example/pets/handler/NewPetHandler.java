@@ -9,11 +9,8 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import com.example.pets.Classes.Pet;
-import com.example.pets.HomeActivity;
 import com.example.pets.R;
 import com.example.pets.interfaces.AlertClickListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +21,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
