@@ -120,6 +120,7 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                fetchDataFromCurrentState();
                 if(currentPage == 2 &&
                         mName != "" && mPassword != "" && mUserName != "" &&
                         mName != null && mPassword != null && mUserName != null
@@ -194,7 +195,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         //getting previous text from name and email and storing in a var
 
-        Log.d("DATA", "Data from page2 " + mPassword + "_______" +mConfirmPassword);
 
         //updating the state of views
         currentPageTextView.setText("1");
@@ -204,10 +204,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         signUpButton.setText("Next");
 
-        signUpButtonInfo.setVisibility(View.INVISIBLE);
+        signUpButtonInfo.setVisibility(View.GONE);
 
         userNameTextInputLayout.setCounterEnabled(false);
-        //userNameTextInputLayout.setCounterMaxLength(12);
 
         nameTextInputLayout.setHint("Name");
         userNameTextInputLayout.setHint("Username/Email");
@@ -226,10 +225,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     void setPage2(){
-        //getting previous text from name and email and storing in a var
-
-
-        Log.d("DATA", "Data from page1 " + mName + "_______" +mUserName);
 
         //updating the state of views
         currentPageTextView.setText("2");
@@ -249,7 +244,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         nameAndPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         userEmailAndConfirmPasswordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
 
 
         nameAndPasswordEditText.setCompoundDrawablesWithIntrinsicBounds(
@@ -276,17 +270,13 @@ public class SignUpActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         setUpServerDatabase(task.getResult().getUser().getUid());
+                    }else{
+                        toast(task.getException().getMessage());
+                        dialog.dismiss();
                     }
                 }
             });
 
-
-            mAuth.signInWithEmailAndPassword(mUserName, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-
-                }
-            });
         }
     }
 
