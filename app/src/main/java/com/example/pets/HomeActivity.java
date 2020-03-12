@@ -442,14 +442,26 @@ public class HomeActivity extends AppCompatActivity {
                     .update(""+currentPetOpenedInBottomSheet.getId(), updatedPet).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    adapter.update(currentPetOpenedInBottomSheet.getId(), currentPetOpenedInBottomSheet);
-                    alertHandler.hideProgressWithInfo("Success", 1);
+
+                    if(task.getException() != null){
+                        alertHandler.hideProgressWithInfo(task.getException().getMessage(), 0);
+                    }
+
+                    if(task.isSuccessful()){
+                        adapter.update(currentPetOpenedInBottomSheet.getId(), currentPetOpenedInBottomSheet);
+                        alertHandler.hideProgressWithInfo("Success", 1);
+                    }else if(task.isCanceled()){
+                        alertHandler.hideProgressWithInfo("Cancel", 1);
+                    }else{
+                        alertHandler.hideProgressWithInfo("Unknown error!", 1);
+                    }
+
 
                     changeBottomSheetFabState();
                 }
             });
         }else{
-            alertHandler.hideProgressWithInfo("No change", 0);
+            alertHandler.hideProgressWithInfo("No change", 1);
 
             changeBottomSheetFabState();
         }

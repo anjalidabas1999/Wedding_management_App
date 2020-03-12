@@ -115,10 +115,12 @@ public class AlertHandler {
 
     public void showProgress(){
         this.setTitle("Updating...");
+        progressBar.setScaleX(1);
+        progressBar.setScaleY(1);
         progressBar.setVisibility(View.VISIBLE);
         statusResult.setVisibility(View.VISIBLE);
 
-        progressBar.animate().rotation(3600).setDuration(3000).setInterpolator(new DecelerateInterpolator()).start();
+        progressBar.animate().rotation(2000).setDuration(2000).setInterpolator(new DecelerateInterpolator()).start();
 
         (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).animate()
                 .translationX(-100).scaleY(0).scaleX(0).setDuration(500).start();
@@ -129,7 +131,8 @@ public class AlertHandler {
 
     public void hideProgress(){
         progressBar.setVisibility(View.GONE);
-        statusResult.animate().scaleY(0).scaleX(0).setDuration(0).start();
+        statusResult.setScaleX(0);
+        statusResult.setScaleY(0);
         statusResult.setVisibility(View.GONE);
 
         (alertDialog.findViewById(R.id.yesNo_confirm_imageButton)).animate()
@@ -142,32 +145,13 @@ public class AlertHandler {
     public void doAfterSeconds(String message, int status){
         setTitle(message);
         if(status == 0){
-
-            statusResult.animate().scaleX(1).scaleY(1).setDuration(500).start();
-
-            (new Handler()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    progressBar.animate().scaleX(0).scaleY(0).setDuration(500).start();
-                }
-            }, 500);
-
+            statusResult.setImageResource(R.drawable.ic_close);
         }else{
-
-            statusResult.animate().scaleX(1).scaleY(1).setDuration(500).start();
-
-            (new Handler()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    progressBar.animate().scaleX(0).scaleY(0).setDuration(500).start();
-                }
-            }, 500);
-
+            statusResult.setImageResource(R.drawable.ic_check);
         }
 
-
+        statusResult.animate().scaleX(1).scaleY(1).setDuration(500).start();
+        progressBar.animate().scaleX(0).scaleY(0).setDuration(500).start();
 
         (new Handler()).postDelayed(new Runnable() {
             @Override
