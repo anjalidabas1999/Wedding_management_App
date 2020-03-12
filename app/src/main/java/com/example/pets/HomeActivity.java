@@ -449,7 +449,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
         }else{
-            alertHandler.hideProgressWithInfo("No change", 1);
+            alertHandler.hideProgressWithInfo("No change", 0);
 
             changeBottomSheetFabState();
         }

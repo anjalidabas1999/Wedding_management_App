@@ -29,7 +29,17 @@
             android:layout_centerInParent="true"
             android:visibility="gone"
             android:indeterminate="true"
-            />
+           />
+
+        <ImageView
+            android:id="@+id/yesNo_status_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_check"
+            android:visibility="gone"
+            android:scaleY="0"
+            android:scaleX="0"/>
 
 
         <ImageButton
