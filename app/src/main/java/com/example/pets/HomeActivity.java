@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +14,11 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -30,6 +37,7 @@ import com.example.pets.account.LoginActivity;
 import com.example.pets.adapter.PetAdapter;
 import com.example.pets.handler.AlertHandler;
 import com.example.pets.handler.NewPetHandler;
+import com.example.pets.handler.PetDeleteHelperCallback;
 import com.example.pets.interfaces.AlertClickListener;
 import com.example.pets.interfaces.ItemListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -63,6 +71,7 @@ public class HomeActivity extends AppCompatActivity {
     BottomSheetBehavior bottomSheetBehavior;
 
     RecyclerView recyclerView;
+    ItemTouchHelper itemTouchHelper;
 
     int fabState = 0; // 0: fab closed, 1:fab opened
     int drawerState = 0; //0: closed, 1:opened
@@ -153,8 +162,13 @@ public class HomeActivity extends AppCompatActivity {
 
 
         //setting recycler view
+        itemTouchHelper = new ItemTouchHelper(new PetDeleteHelperCallback(0, ItemTouchHelper.LEFT, HomeActivity.this, adapter));
+
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
         recyclerView.setHasFixedSize(false);
+
 
         adapter = new PetAdapter(new ArrayList<>(), new View.OnClickListener() {
             @Override
