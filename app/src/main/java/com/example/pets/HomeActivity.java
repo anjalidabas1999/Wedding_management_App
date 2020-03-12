@@ -443,14 +443,14 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     adapter.update(currentPetOpenedInBottomSheet.getId(), currentPetOpenedInBottomSheet);
-                    alertHandler.hideProgress();
-                    alertHandler.dismiss();
+                    alertHandler.hideProgressWithInfo("Success", 1);
+
                     changeBottomSheetFabState();
                 }
             });
         }else{
-            alertHandler.hideProgress();
-            alertHandler.dismiss();
+            alertHandler.hideProgressWithInfo("No change", 1);
+
             changeBottomSheetFabState();
         }
     }

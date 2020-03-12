@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
@@ -129,8 +131,77 @@ public class AlertHandler {
                 .translationX(0).scaleY(1).scaleX(1).setDuration(0).start();
     }
 
-    public void hideProgressWithInfo(){
-        
+    public void doAfterSeconds(String message, int status){
+        setTitle(message);
+        if(status == 0){
+
+            progressBar.animate().scaleX(0).scaleY(0).setDuration(500).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+
+                    progressBar.setIndeterminateDrawable(activity.getResources().getDrawable(R.drawable.ic_close));
+                    progressBar.animate().scaleX(1).scaleY(1).setDuration(500).start();
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            }).start();
+
+        }else{
+
+            progressBar.setBackground(activity.getResources().getDrawable(R.drawable.ic_check));
+
+            //progressBar.setIndeterminateDrawable(activity.getResources().getDrawable(R.drawable.ic_check));
+            //progressBar.requestLayout();
+            //progressBar.animate().scaleX(0).scaleY(0).setDuration(500).start();
+
+            /*(new Handler()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    progressBar.setIndeterminateDrawable(activity.getResources().getDrawable(R.drawable.ic_check));
+                    progressBar.requestLayout();
+                    progressBar.animate().scaleX(1).scaleY(1).setDuration(500).start();
+                }
+            }, 500);*/
+
+        }
+
+
+
+        (new Handler()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+                dismiss();
+            }
+        }, 5000);
+    }
+
+    public void hideProgressWithInfo(String message, int status){
+        // status:0 failure, status:1 success
+        (new Handler()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doAfterSeconds(message, status);
+            }
+        }, 5000);
+
+
+
     }
 
     public void show(){
