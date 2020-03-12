@@ -14,8 +14,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pets.Classes.Pet;
 import com.example.pets.R;
 import com.example.pets.adapter.PetAdapter;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class PetDeleteHelperCallback extends ItemTouchHelper.SimpleCallback {
 
@@ -36,7 +41,7 @@ public class PetDeleteHelperCallback extends ItemTouchHelper.SimpleCallback {
     void init(){
         background = new ColorDrawable(Color.RED);
         xMark = ContextCompat.getDrawable(activity, R.drawable.ic_delete_white_32dp);
-        xMark.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        //xMark.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         xMarkMargin = 64;
         initiated = true;
     }
@@ -48,9 +53,9 @@ public class PetDeleteHelperCallback extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        int pos = viewHolder.getAdapterPosition();
-        Toast.makeText(activity, adapter.get(pos).getName(), Toast.LENGTH_SHORT).show();
-        //adapter.remove(pos);
+        Toast.makeText(activity, ""+viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+        initiateDelete(adapter.get(viewHolder.getAdapterPosition()));
+        adapter.remove(viewHolder.getAdapterPosition());
     }
 
     @Override
@@ -81,5 +86,15 @@ public class PetDeleteHelperCallback extends ItemTouchHelper.SimpleCallback {
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
+
+    void initiateDelete(Pet pet){
+        FirebaseFirestore mDb = FirebaseFirestore.getInstance();
+        mDb.collection("user").document(FirebaseAuth.getInstance().getUid()).collection("data")
+                .document("data").update("size", FieldValue.increment(-1));
+
+        mDb.collection("user").document(FirebaseAuth.getInstance().getUid()).collection("data")
+                .document("data").update(""+pet.getId(), FieldValue.delete());
+    }
+
 
 }

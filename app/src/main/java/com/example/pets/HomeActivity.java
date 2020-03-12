@@ -162,10 +162,6 @@ public class HomeActivity extends AppCompatActivity {
 
 
         //setting recycler view
-        itemTouchHelper = new ItemTouchHelper(new PetDeleteHelperCallback(0, ItemTouchHelper.LEFT, HomeActivity.this, adapter));
-
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
         recyclerView.setHasFixedSize(false);
 
@@ -186,7 +182,10 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        itemTouchHelper = new ItemTouchHelper(new PetDeleteHelperCallback(0, ItemTouchHelper.LEFT, HomeActivity.this, adapter));
+
         recyclerView.setAdapter(adapter);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         //setting bottom sheet
         setUpBottomSheet();

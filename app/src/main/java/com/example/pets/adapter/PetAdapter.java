@@ -80,6 +80,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
     public void remove(int pos){
         pets.remove(pos);
         notifyDataSetChanged();
+        itemListener.size(pets.size());
     }
 
     public Pet get(int pos){
