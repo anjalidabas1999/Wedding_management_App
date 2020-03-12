@@ -20,6 +20,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.BounceInterpolator;
@@ -513,7 +514,15 @@ public class HomeActivity extends AppCompatActivity {
         root.animate().scaleX(0.7f).scaleY(0.7f).translationX(300).setInterpolator(new AccelerateInterpolator()).setDuration(500).start();
         drawerOpener.animate().rotation(180).setDuration(500).start();
         //animating drawer items
-        int travelDist = -400;
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        int travelDist = -width/2;
+
         accountsMenuItem.animate().translationX(travelDist).setDuration(0).start();
         settingsMenuItem.animate().translationX(travelDist).setDuration(0).start();
         logOutMenuItem.animate().translationX(travelDist).setDuration(0).start();
@@ -576,7 +585,14 @@ public class HomeActivity extends AppCompatActivity {
         drawerOpener.animate().rotation(0).setDuration(500).start();
         //animating drawer items
         final int animDuration = 100;
-        final int travelDist = -400;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+
+        final int travelDist = -width/2;
 
         accountsMenuItem.animate().translationX(travelDist).setDuration(animDuration).setInterpolator(new AccelerateInterpolator()).setListener(new Animator.AnimatorListener() {
             @Override
