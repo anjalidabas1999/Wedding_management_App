@@ -12,6 +12,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.pets.Classes.Pet;
 import com.example.pets.account.LoginActivity;
@@ -48,6 +50,8 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -217,7 +221,9 @@ public class HomeActivity extends AppCompatActivity {
                 changeFabState();
                 IntentIntegrator integrator = new IntentIntegrator(HomeActivity.this);
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-                integrator.setPrompt("Scan a barcode");
+                integrator.setTimeout(20000);
+                integrator.setPrompt("Scan a Qr Code");
+                integrator.setOrientationLocked(true);
                 integrator.setBeepEnabled(false);
                 integrator.setBarcodeImageEnabled(true);
                 integrator.initiateScan();
@@ -630,7 +636,56 @@ public class HomeActivity extends AppCompatActivity {
         Dialog dialog = new Dialog(HomeActivity.this);
 //        View v = LayoutInflater.from(HomeActivity.this).inflate(R.layout.qr_code_layout, false);
         dialog.setContentView(R.layout.qr_code_layout);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        dialog.setCancelable(false);
+
+        ImageView qrImage = dialog.findViewById(R.id.dialog_imageView);
+        LinearLayout qrContainer = dialog.findViewById(R.id.dialog_qrContainer_linearLayout);
+        FloatingActionButton closeFab = dialog.findViewById(R.id.dialog_close_fab);
+        TextView headingTextView = dialog.findViewById(R.id.dialog_heading_textView);
+
         ((ImageView)dialog.findViewById(R.id.dialog_imageView)).setImageBitmap(generateQR(pet));
+
+        closeFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int[] p = new int[2];
+                closeFab.getLocationOnScreen(p);
+
+                closeFab.animate().rotation(270).setDuration(1000).start();
+
+                qrContainer.animate().translationY(p[0]+qrContainer.getHeight()/3).setDuration(1000).start();
+                qrContainer.animate().scaleX(0).scaleY(0).setDuration(1000).start();
+
+                headingTextView.animate().scaleX(0).setDuration(1000).setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                }).start();
+
+
+
+            }
+        });
+
         dialog.show();
     }
 

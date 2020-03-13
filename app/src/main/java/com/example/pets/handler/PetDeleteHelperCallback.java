@@ -3,6 +3,8 @@ package com.example.pets.handler;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -63,9 +65,21 @@ public class PetDeleteHelperCallback extends ItemTouchHelper.SimpleCallback {
             init();
         }
 
+        Rect r = new Rect();
+        r.left = (int) (itemView.getRight()+dX);
+        r.top = itemView.getTop();
+        r.right = itemView.getRight();
+        r.bottom = itemView.getBottom();
 
-        background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-        background.draw(c);
+        Paint p = new Paint();
+        p.setColor(activity.getResources().getColor(R.color.common_google_signin_btn_text_dark_focused));
+
+
+        //background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+        //background.draw(c);
+
+        //c.drawRect(r, p);
+        //background.draw(c);
 
         // draw x mark
         int itemHeight = itemView.getBottom() - itemView.getTop();
