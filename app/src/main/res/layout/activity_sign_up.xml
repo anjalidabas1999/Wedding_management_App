@@ -94,18 +94,16 @@
 
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/signUpActivity_addProfileImage_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginStart="@dimen/LoginStartMargin"
         android:layout_marginTop="32dp"
         app:layout_constraintTop_toBottomOf="@id/signUpActivity_introText_textVIew"
         app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/ic_unlink"
-        android:backgroundTint="#00C7CB"
-        app:borderWidth="0dp"
-        android:elevation="16dp"/>
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/signUpActivity_picUploadText_textView"

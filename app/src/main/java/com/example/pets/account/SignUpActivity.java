@@ -36,6 +36,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class SignUpActivity extends AppCompatActivity {
 
     final int PROFILE_IMAGE_TAG = 100;
@@ -46,7 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     Dialog dialog;
 
-    FloatingActionButton profileImageFab;
+    CircleImageView profileImageFab;
 
     EditText nameAndPasswordEditText;
     EditText userEmailAndConfirmPasswordEditText;
@@ -122,15 +124,16 @@ public class SignUpActivity extends AppCompatActivity {
             public boolean onLongClick(View view) {
                 fetchDataFromCurrentState();
                 if(currentPage == 2 &&
-                        mName != "" && mPassword != "" && mUserName != "" &&
+                        !mName.equals("") && !mPassword.equals("") && !mUserName.equals("") &&
                         mName != null && mPassword != null && mUserName != null
                 ){
                     signUp();
                 }else{
-                    /*setPage1();
-                    nameAndPasswordEditText.setText(mName != "" && mName != null? mName: "");
-                    userEmailAndConfirmPasswordEditText.setText(mUserName != "" && mUserName != null? mUserName: "");
-                    nameAndPasswordEditText.requestFocus();*/
+                    currentPage = 1;
+                    updateCurrentPage();
+                    nameAndPasswordEditText.setText(mName.equals("") && mName != null? mName: "");
+                    userEmailAndConfirmPasswordEditText.setText(mUserName.equals("") && mUserName != null? mUserName: "");
+                    nameAndPasswordEditText.requestFocus();
                 }
                 return true;
             }
@@ -160,7 +163,8 @@ public class SignUpActivity extends AppCompatActivity {
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = data.getData();
                     Bitmap bt = getPath(selectedImage);
-                    profileImageFab.setImageBitmap(bt);
+
+                    profileImageFab.setImageURI(selectedImage);
                 }
         }
     }
