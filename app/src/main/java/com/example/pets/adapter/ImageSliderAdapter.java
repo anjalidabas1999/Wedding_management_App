@@ -17,11 +17,10 @@ import java.util.List;
 public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.ImageSliderViewHolder>  {
 
     List<SliderItem> sliderItemList;
-    ViewPager2 viewPager2;
 
-    public ImageSliderAdapter(List<SliderItem> sliderItemList, ViewPager2 viewPager2) {
+    public ImageSliderAdapter(List<SliderItem> sliderItemList) {
         this.sliderItemList = sliderItemList;
-        this.viewPager2 = viewPager2;
+
     }
 
     @NonNull
@@ -38,6 +37,10 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
     @Override
     public int getItemCount() {
         return sliderItemList.size();
+    }
+
+    public SliderItem get(int pos){
+        return  sliderItemList.get(pos);
     }
 
     class ImageSliderViewHolder extends RecyclerView.ViewHolder{

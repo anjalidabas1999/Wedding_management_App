@@ -11,6 +11,7 @@ import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.example.pets.handler.NewPetHandler;
 import com.example.pets.handler.PetDeleteHelperCallback;
 import com.example.pets.interfaces.AlertClickListener;
 import com.example.pets.interfaces.ItemListener;
+import com.example.pets.menu.SettingsActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -118,7 +120,26 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        applyTheme();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    void applyTheme(){
+        SharedPreferences sP = getSharedPreferences("theme", MODE_PRIVATE);
+        ((RelativeLayout)findViewById(R.id.menu_root_relativeLayout)).setBackground(getDrawable(sP.getInt("theme", R.drawable.bg1)));
+
+    }
+
     void setUp(){
+
+        applyTheme();
 
         //getting views by id
         root = findViewById(R.id.homeActivity_root_relativeLayout);
@@ -498,6 +519,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        settingsMenuItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+            }
+        });
+
 
     }
 
@@ -765,14 +793,21 @@ public class HomeActivity extends AppCompatActivity {
                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                    @Override
                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                       int size= documentSnapshot.getLong("size").intValue();
-                       int i = 0;
-                       while(size>=1 && i<size && size>0){
-                           String currentPet = documentSnapshot.getString(""+i);
-                           Pet pet = gson.fromJson(currentPet, Pet.class);
-                           adapter.add(pet);
-                           i++;
+
+                       try {
+                           int size= documentSnapshot.getLong("size").intValue();
+                           int i = 0;
+                           while(size>=1 && i<size && size>0){
+                               String currentPet = documentSnapshot.getString(""+i);
+                               Pet pet = gson.fromJson(currentPet, Pet.class);
+                               adapter.add(pet);
+                               i++;
+                           }
+                       }catch (Exception ex){
+
                        }
+
+
 
 
                    }

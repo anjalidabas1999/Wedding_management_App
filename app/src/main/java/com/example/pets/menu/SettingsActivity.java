@@ -7,15 +7,18 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.example.pets.Classes.SliderItem;
 import com.example.pets.R;
 import com.example.pets.adapter.ImageSliderAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,7 @@ import java.util.List;
 public class SettingsActivity extends AppCompatActivity {
 
     ViewPager2 imageSliderViewPager;
+    FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setUp() {
         imageSliderViewPager = findViewById(R.id.viewPager2);
+        floatingActionButton = findViewById(R.id.fab);
 
         List<SliderItem> sliderItemList = new ArrayList<>();
         sliderItemList.add(new SliderItem(R.drawable.bg1));
@@ -44,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
         sliderItemList.add(new SliderItem(R.drawable.bg5));
         sliderItemList.add(new SliderItem(R.drawable.bg6));
 
-        imageSliderViewPager.setAdapter(new ImageSliderAdapter(sliderItemList, imageSliderViewPager));
+        imageSliderViewPager.setAdapter(new ImageSliderAdapter(sliderItemList));
 
 
         imageSliderViewPager.setClipToPadding(false);
@@ -65,7 +70,22 @@ public class SettingsActivity extends AppCompatActivity {
 
         imageSliderViewPager.setPageTransformer(pageTransformer);
 
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int id = ((ImageSliderAdapter) imageSliderViewPager.getAdapter()).get(imageSliderViewPager.getCurrentItem()).getImage();
+                Toast.makeText(SettingsActivity.this, ""+id, Toast.LENGTH_SHORT).show();
+                updateTheme(id);
+                finish();
+            }
+        });
 
+    }
 
+    void updateTheme(int themeId){
+        SharedPreferences sP = getSharedPreferences("theme", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sP.edit();
+        editor.putInt("theme", themeId);
+        editor.commit();
     }
 }

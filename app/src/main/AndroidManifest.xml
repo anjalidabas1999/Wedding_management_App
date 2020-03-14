@@ -17,11 +17,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".menu.SettingsActivity"
             android:theme="@style/NoAppBarTheme_LoginScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".account.SignUpActivity"
@@ -32,6 +28,11 @@
         <activity
             android:name=".SplashActivity"
             android:theme="@style/NoAppBarTheme_IntroScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity
