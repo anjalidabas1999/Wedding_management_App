@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".menu.SettingsActivity"
-            android:theme="@style/NoAppBarTheme_LoginScreen">
+            android:theme="@style/NoAppBarTheme_IntroScreen">
 
         </activity>
         <activity
