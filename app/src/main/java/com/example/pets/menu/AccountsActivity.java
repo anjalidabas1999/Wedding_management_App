@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -58,6 +59,13 @@ public class AccountsActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.accountsActivity_profile_circularImageView);
         totalPetsTextView = findViewById(R.id.accountsActivity_totalPets_textView);
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
 
@@ -84,8 +92,8 @@ public class AccountsActivity extends AppCompatActivity {
         usernameEditText.setText(user.getUsername());
         passwordEditText.setText(user.getPassword());
 
-        Picasso.get().load(user.getImage()).into(topProfileImageView);
-        Picasso.get().load(user.getImage()).fit().into(profileImage);
+        Picasso.get().load(user.getImage()).placeholder(R.drawable.bg6).into(topProfileImageView);
+        Picasso.get().load(user.getImage()).placeholder(R.drawable.bg6).fit().into(profileImage);
     }
 
 
