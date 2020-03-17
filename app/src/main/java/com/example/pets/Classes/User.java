@@ -5,8 +5,16 @@ public class User {
     String name;
     String username;
     String password;
+    String image;
 
     public User() {
+    }
+
+    public User(String name, String username, String password, String image) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.image = image;
     }
 
     public User(String name, String username, String password) {
@@ -37,5 +45,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

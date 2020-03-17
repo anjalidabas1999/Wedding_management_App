@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".menu.AccountsActivity">
+
+    <ImageView
+        android:id="@+id/accountsActivity_topProfileImage_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg1"
+        android:alpha="0.8"/>
+
+    <RelativeLayout
+        android:id="@+id/accountsActivity_bottom_relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/curve_accounts_background"
+        android:layout_below="@id/accountsActivity_topProfileImage_imageView"
+        android:layout_marginTop="-60dp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/accountsActivity_profile_circularImageView"
+        android:layout_width="104dp"
+        android:layout_height="104dp"
+        android:src="@drawable/bg4"
+        android:layout_above="@id/accountsActivity_bottom_relativeLayout"
+        android:layout_marginLeft="16dp"
+        app:civ_border_width="5dp"
+        app:civ_border_color="@color/white"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bottom_curve_bg1"
+        android:backgroundTint="@color/colorAccent"
+        android:alpha="0.5"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bottom_curve_bg2"
+        android:backgroundTint="@color/colorAccent"
+        android:alpha="0.5"/>
+    
+    <TextView
+        android:id="@+id/accountsActivity_petCounter_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Pets"
+        android:layout_below="@id/accountsActivity_profile_circularImageView"
+        android:layout_marginTop="58dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:textColor="#99353938"/>
+
+    <TextView
+        android:id="@+id/accountsActivity_totalPets_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="237"
+        android:layout_below="@id/accountsActivity_profile_circularImageView"
+        android:layout_marginTop="18dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="22sp"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"/>
+
+    <View
+        android:id="@+id/accountsActivity_line_view"
+        android:layout_width="200dp"
+        android:layout_height="2dp"
+        android:layout_below="@id/accountsActivity_petCounter_textView"
+        android:background="@color/colorAccent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"/>
+
+
+    <RelativeLayout
+        android:id="@+id/accountsActivity_nameContainer_RelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/accountsActivity_line_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp">
+
+        <ImageView
+            android:id="@+id/accountsActivity_nameIcon_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_person_color_accent"/>
+
+        <EditText
+            android:id="@+id/accountsActivity_name_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/zxing_transparent"
+            android:minWidth="200dp"
+            android:maxWidth="200dp"
+            android:text="Danish Jamal"
+            android:layout_toRightOf="@id/accountsActivity_nameIcon_imageView"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/accountsActivity_usernameContainer_RelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/accountsActivity_nameContainer_RelativeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        >
+
+        <ImageView
+            android:id="@+id/accountsActivity_usernameIcon_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_mail_color_accent"/>
+
+        <EditText
+            android:id="@+id/accountsActivity_username_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/zxing_transparent"
+            android:minWidth="200dp"
+            android:maxWidth="200dp"
+            android:text="danish@gmail.com"
+            android:layout_toRightOf="@id/accountsActivity_usernameIcon_imageView"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/accountsActivity_passwordContainer_RelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/accountsActivity_usernameContainer_RelativeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp">
+
+        <ImageView
+            android:id="@+id/accountsActivity_passwordIcon_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_lock_color_accent"/>
+
+        <EditText
+            android:id="@+id/accountsActivity_password_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/zxing_transparent"
+            android:minWidth="200dp"
+            android:maxWidth="200dp"
+            android:text="danish@gmail.com"
+            android:inputType="textPassword"
+            android:layout_toRightOf="@id/accountsActivity_passwordIcon_imageView"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"/>
+
+
+    </RelativeLayout>
+    
+
+    <ImageButton
+        android:id="@+id/accountsActivity_backButton_imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_back_white"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="32dp"
+        android:background="@color/zxing_transparent"/>
+
+    <ImageButton
+        android:id="@+id/accountsActivity_edit_imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_edit_white_24dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/zxing_transparent"
+        android:layout_alignParentEnd="true"/>
+
+
+</RelativeLayout>

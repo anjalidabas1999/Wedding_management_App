@@ -33,6 +33,7 @@ import com.example.pets.handler.NewPetHandler;
 import com.example.pets.handler.PetDeleteHelperCallback;
 import com.example.pets.interfaces.AlertClickListener;
 import com.example.pets.interfaces.ItemListener;
+import com.example.pets.menu.AccountsActivity;
 import com.example.pets.menu.SettingsActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,6 +52,9 @@ import com.google.zxing.WriterException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -350,7 +354,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    void updateBottomSheet(final Pet pet){
+    void updateBottomSheet(@NotNull final Pet pet){
         currentPetOpenedInBottomSheet = pet;
         overLay.setVisibility(View.VISIBLE);
         bottomSheetNameEditText.setText(pet.getName());
@@ -523,6 +527,13 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+            }
+        });
+
+        accountsMenuItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this, AccountsActivity.class));
             }
         });
 

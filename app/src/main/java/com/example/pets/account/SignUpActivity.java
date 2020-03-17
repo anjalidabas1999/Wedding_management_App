@@ -34,6 +34,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -68,6 +72,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseFirestore mFireStore;
+    FirebaseStorage mStorage;
+
+    Uri mSelectedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +103,7 @@ public class SignUpActivity extends AppCompatActivity {
         //getting instance of firebase object
         mAuth = FirebaseAuth.getInstance();
         mFireStore = FirebaseFirestore.getInstance();
+        mStorage = FirebaseStorage.getInstance();
 
 
         //adding on click listeners
@@ -162,12 +170,15 @@ public class SignUpActivity extends AppCompatActivity {
             case PROFILE_IMAGE_TAG:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = data.getData();
-                    Bitmap bt = getPath(selectedImage);
+                    toast(selectedImage.toString());
+
+                    mSelectedImage = selectedImage;
 
                     profileImageFab.setImageURI(selectedImage);
                 }
         }
     }
+
 
     private Bitmap getPath(Uri uri) {
 
@@ -262,7 +273,7 @@ public class SignUpActivity extends AppCompatActivity {
     void signUp(){
         dialog.show();
         fetchDataFromCurrentState();
-        if(!(mPassword.equals(mConfirmPassword) ? true:false)){
+        if(!(mPassword.equals(mConfirmPassword))){
             nameAndPasswordEditText.requestFocus(1);
             userEmailAndConfirmPasswordEditText.requestFocus();
 
@@ -273,7 +284,7 @@ public class SignUpActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
-                        setUpServerDatabase(task.getResult().getUser().getUid());
+                       uploadImage(task.getResult().getUser().getUid());
                     }else{
                         toast(task.getException().getMessage());
                         dialog.dismiss();
@@ -284,8 +295,41 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    void setUpServerDatabase(String uid){
-        mFireStore.collection("user").document(uid).set(new User(mName, mUserName, mPassword))
+    void uploadImage(String uid) {
+
+
+        if(mSelectedImage.toString()!=null && mSelectedImage.toString().equals("")){
+            StorageReference mRef = mStorage.getReference().child("user/default.jpeg");
+            mRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    setUpServerDatabase(uid, uri.toString());
+                }
+            });
+
+        }else{
+            StorageReference mRef = mStorage.getReference().child("user/"+uid+".jpeg");
+            mRef.putFile(mSelectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if(task.isSuccessful()){
+                        mRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                setUpServerDatabase(uid, uri.toString());
+                            }
+                        });
+                    }
+
+                }
+            });
+        }
+
+    }
+
+    void setUpServerDatabase(String uid, String imageUrl){
+
+        mFireStore.collection("user").document(uid).set(new User(mName, mUserName, mPassword, imageUrl))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

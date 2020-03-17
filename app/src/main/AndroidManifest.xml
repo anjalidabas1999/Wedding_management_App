@@ -15,16 +15,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".menu.SettingsActivity"
-            android:theme="@style/NoAppBarTheme_IntroScreen">
-
-        </activity>
+        <activity android:name=".menu.AccountsActivity"
+            android:theme="@style/NoAppBarTheme_IntroScreen"></activity>
+        <activity
+            android:name=".menu.SettingsActivity"
+            android:theme="@style/NoAppBarTheme_IntroScreen"></activity>
         <activity
             android:name=".account.SignUpActivity"
-            android:theme="@style/NoAppBarTheme_LoginScreen"></activity>
+            android:theme="@style/NoAppBarTheme_LoginScreen" />
         <activity
             android:name=".account.LoginActivity"
-            android:theme="@style/NoAppBarTheme_LoginScreen"></activity>
+            android:theme="@style/NoAppBarTheme_LoginScreen" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/NoAppBarTheme_IntroScreen">
@@ -33,11 +34,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".HomeActivity"
-            android:theme="@style/NoAppBarTheme_IntroScreen"></activity>
+            android:theme="@style/NoAppBarTheme_IntroScreen" />
     </application>
 
 </manifest>
