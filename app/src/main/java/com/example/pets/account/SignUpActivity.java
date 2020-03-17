@@ -4,10 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 import com.example.pets.Classes.User;
 import com.example.pets.HomeActivity;
 import com.example.pets.R;
+import com.example.pets.handler.AccountsAlertHandler;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.ChasingDots;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -51,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     Button signUpButton;
 
-    Dialog dialog;
+    AccountsAlertHandler accountsAlertHandler;
 
     CircleImageView profileImageFab;
 
@@ -95,7 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
         profileImageFab = findViewById(R.id.signUpActivity_addProfileImage_fab);
         signUpButtonInfo = findViewById(R.id.loginActivity_signUpButtonInfo_textView);
 
-        setUpDialog();
+        accountsAlertHandler = new AccountsAlertHandler(this, SignUpActivity.this, "");
 
         nameAndPasswordEditText = nameTextInputLayout.getEditText();
         userEmailAndConfirmPasswordEditText = userNameTextInputLayout.getEditText();
@@ -271,14 +275,22 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     void signUp(){
-        dialog.show();
+        accountsAlertHandler.show();
+        if(!isNetworkAvailable()){
+            accountsAlertHandler.hideProgressWithInfo("It seems that you are not connected to Internet!!", 3000);
+            return;
+        }
+
+        accountsAlertHandler.setTitle("Signing you in");
+
         fetchDataFromCurrentState();
         if(!(mPassword.equals(mConfirmPassword))){
             nameAndPasswordEditText.requestFocus(1);
             userEmailAndConfirmPasswordEditText.requestFocus();
+            accountsAlertHandler.hideProgressWithInfo("Password doesn't match", 2000);
 
         }else{
-            toast("pass: ");
+            accountsAlertHandler.setTitle("Signing you in");
 
             mAuth.createUserWithEmailAndPassword(mUserName, mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -286,8 +298,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if(task.isSuccessful()){
                        uploadImage(task.getResult().getUser().getUid());
                     }else{
-                        toast(task.getException().getMessage());
-                        dialog.dismiss();
+                        accountsAlertHandler.hideProgressWithInfo(task.getException().getMessage(), 5000);
                     }
                 }
             });
@@ -296,9 +307,9 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     void uploadImage(String uid) {
+        accountsAlertHandler.setTitle("Setting profile image...");
 
-
-        if(mSelectedImage.toString()!=null && mSelectedImage.toString().equals("")){
+        if(mSelectedImage==null || mSelectedImage.toString().equals("")){
             StorageReference mRef = mStorage.getReference().child("user/default.jpeg");
             mRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -318,7 +329,14 @@ public class SignUpActivity extends AppCompatActivity {
                             public void onSuccess(Uri uri) {
                                 setUpServerDatabase(uid, uri.toString());
                             }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                accountsAlertHandler.hideProgressWithInfo("Error fetching profile image", 3000);
+                            }
                         });
+                    }else{
+                        accountsAlertHandler.hideProgressWithInfo(task.getException().getMessage(), 3000);
                     }
 
                 }
@@ -328,6 +346,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     void setUpServerDatabase(String uid, String imageUrl){
+        accountsAlertHandler.setTitle("Setting up database");
 
         mFireStore.collection("user").document(uid).set(new User(mName, mUserName, mPassword, imageUrl))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -343,9 +362,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 }).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                dialog.dismiss();
-                                startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
-                                finish();
+                                accountsAlertHandler.hideProgressWithInfo("Success", 2000);
                             }
                         });
 
@@ -354,8 +371,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                toast("failed: "+e.getMessage());
-                dialog.dismiss();
+                accountsAlertHandler.hideProgressWithInfo(e.getMessage(), 5000);
             }
         });
 
@@ -371,18 +387,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    void setUpDialog(){
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.progress_dialog);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        dialog.setCancelable(false);
-        ProgressBar progressBar = dialog.findViewById(R.id.dialog_progressBar);
-
-        Sprite anim = new ChasingDots();
-        anim.setColor(getResources().getColor(R.color.white));
-        progressBar.setIndeterminateDrawable(anim);
-
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     void toast(String message){
