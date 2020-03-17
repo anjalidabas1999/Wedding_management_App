@@ -673,7 +673,6 @@ public class HomeActivity extends AppCompatActivity {
 
     void showQrDialog(Pet pet){
         Dialog dialog = new Dialog(HomeActivity.this);
-//        View v = LayoutInflater.from(HomeActivity.this).inflate(R.layout.qr_code_layout, false);
         dialog.setContentView(R.layout.qr_code_layout);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);

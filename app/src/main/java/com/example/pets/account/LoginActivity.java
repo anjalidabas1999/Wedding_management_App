@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.ActivityOptions;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -12,10 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.pets.HomeActivity;
 import com.example.pets.R;
+import com.example.pets.handler.AccountsAlertHandler;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.ChasingDots;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText userNameEditTextView;
     EditText passwordEditTextView;
 
-    Dialog dialog;
+    AccountsAlertHandler accountsAlertHandler;
 
     FirebaseAuth mAuth;
 
@@ -61,8 +66,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditTextView = findViewById(R.id.signUpActivity_userName_textInputLayout);
         userNameEditTextView = findViewById(R.id.signUpActivity_name_textInputLayout);
 
-        dialog = new Dialog(LoginActivity.this);
-        setUpDialog();
+
+        accountsAlertHandler = new AccountsAlertHandler(this, LoginActivity.this, "");
 
         //setting on click
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -109,23 +114,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void logIn(String username, String password){
-        dialog.show();
+        accountsAlertHandler.show();
+        if(!isNetworkAvailable()){
+            accountsAlertHandler.hideProgressWithInfo("It seems that you are not connected to Internet!!", 3000);
+            return;
+        }
+
+        accountsAlertHandler.setTitle("Loging you in");
+
 
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                        finish();
-                        dialog.dismiss();
+                        accountsAlertHandler.hideProgressWithInfo("Success", 2000);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
 
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
+                        accountsAlertHandler.hideProgressWithInfo(e.getMessage(), 5000);
 
 
 
@@ -142,14 +151,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    void setUpDialog(){
-        dialog.setContentView(R.layout.progress_dialog);
-        dialog.setCancelable(false);
-        ProgressBar progressBar = dialog.findViewById(R.id.dialog_progressBar);
-
-        Sprite anim = new ChasingDots();
-        anim.setColor(getResources().getColor(R.color.white));
-        progressBar.setIndeterminateDrawable(anim);
-
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+
 }

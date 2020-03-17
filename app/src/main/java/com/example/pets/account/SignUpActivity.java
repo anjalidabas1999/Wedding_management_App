@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.pets.Classes.User;
@@ -94,7 +95,6 @@ public class SignUpActivity extends AppCompatActivity {
         profileImageFab = findViewById(R.id.signUpActivity_addProfileImage_fab);
         signUpButtonInfo = findViewById(R.id.loginActivity_signUpButtonInfo_textView);
 
-        dialog = new Dialog(this);
         setUpDialog();
 
         nameAndPasswordEditText = nameTextInputLayout.getEditText();
@@ -372,8 +372,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     void setUpDialog(){
+        dialog = new Dialog(this);
         dialog.setContentView(R.layout.progress_dialog);
-
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         dialog.setCancelable(false);
         ProgressBar progressBar = dialog.findViewById(R.id.dialog_progressBar);
 

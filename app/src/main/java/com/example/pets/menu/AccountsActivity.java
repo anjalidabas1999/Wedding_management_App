@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -92,8 +93,12 @@ public class AccountsActivity extends AppCompatActivity {
         usernameEditText.setText(user.getUsername());
         passwordEditText.setText(user.getPassword());
 
-        Picasso.get().load(user.getImage()).placeholder(R.drawable.bg6).into(topProfileImageView);
-        Picasso.get().load(user.getImage()).placeholder(R.drawable.bg6).fit().into(profileImage);
+        RequestCreator requestCreator = Picasso.get().load(user.getImage()).placeholder(R.drawable.bg6);
+
+        requestCreator.into(topProfileImageView);
+        requestCreator.into(profileImage);
+
+
     }
 
 
