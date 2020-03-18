@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".menu.SettingsActivity">
 
+    <View
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg1"
+        android:alpha="0.5"/>
+
 
 
     <androidx.viewpager2.widget.ViewPager2
@@ -14,7 +21,8 @@
         android:layout_width="match_parent"
         android:layout_centerInParent="true"
         android:paddingStart="80dp"
-        android:paddingEnd="80dp"/>
+        android:paddingEnd="80dp"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

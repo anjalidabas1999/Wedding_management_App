@@ -27,6 +27,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     ViewPager2 imageSliderViewPager;
     FloatingActionButton floatingActionButton;
+    View background;
+
+    ImageSliderAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void setUp() {
         imageSliderViewPager = findViewById(R.id.viewPager2);
         floatingActionButton = findViewById(R.id.fab);
+        background = findViewById(R.id.background);
 
         List<SliderItem> sliderItemList = new ArrayList<>();
         sliderItemList.add(new SliderItem(R.drawable.bg1));
@@ -49,7 +53,9 @@ public class SettingsActivity extends AppCompatActivity {
         sliderItemList.add(new SliderItem(R.drawable.bg5));
         sliderItemList.add(new SliderItem(R.drawable.bg6));
 
-        imageSliderViewPager.setAdapter(new ImageSliderAdapter(sliderItemList));
+        adapter = new ImageSliderAdapter(sliderItemList);
+
+        imageSliderViewPager.setAdapter(adapter);
 
 
         imageSliderViewPager.setClipToPadding(false);
@@ -70,11 +76,19 @@ public class SettingsActivity extends AppCompatActivity {
 
         imageSliderViewPager.setPageTransformer(pageTransformer);
 
+        imageSliderViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                background.setBackgroundResource(adapter.get(position).getImage());
+            }
+            
+        });
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int id = ((ImageSliderAdapter) imageSliderViewPager.getAdapter()).get(imageSliderViewPager.getCurrentItem()).getImage();
-                Toast.makeText(SettingsActivity.this, ""+id, Toast.LENGTH_SHORT).show();
+                int id = adapter.get(imageSliderViewPager.getCurrentItem()).getImage();
                 updateTheme(id);
                 finish();
             }
