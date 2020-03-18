@@ -28,6 +28,7 @@ import com.example.pets.Classes.User;
 import com.example.pets.HomeActivity;
 import com.example.pets.R;
 import com.example.pets.handler.AccountsAlertHandler;
+import com.example.pets.network.NetworkStatus;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.ChasingDots;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -276,7 +277,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     void signUp(){
         accountsAlertHandler.show();
-        if(!isNetworkAvailable()){
+        if(!(new NetworkStatus(this)).isNetworkAvailable()){
             accountsAlertHandler.hideProgressWithInfo("It seems that you are not connected to Internet!!", 3000);
             return;
         }
@@ -387,12 +388,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
+
 
     void toast(String message){
         Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();

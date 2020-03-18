@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.pets.HomeActivity;
 import com.example.pets.R;
 import com.example.pets.handler.AccountsAlertHandler;
+import com.example.pets.network.NetworkStatus;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.ChasingDots;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -115,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
 
     void logIn(String username, String password){
         accountsAlertHandler.show();
-        if(!isNetworkAvailable()){
+        if(!(new NetworkStatus(this)).isNetworkAvailable()){
             accountsAlertHandler.hideProgressWithInfo("It seems that you are not connected to Internet!!", 3000);
             return;
         }
@@ -149,13 +150,6 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 

@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.example.pets.Classes.User;
 import com.example.pets.R;
+import com.example.pets.handler.AccountsAlertHandler;
+import com.example.pets.network.NetworkStatus;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +44,8 @@ public class AccountsActivity extends AppCompatActivity {
 
     User user;
 
+    AccountsAlertHandler accountsAlertHandler;
+
     @Override
     protected void
     onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,8 @@ public class AccountsActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.accountsActivity_profile_circularImageView);
         totalPetsTextView = findViewById(R.id.accountsActivity_totalPets_textView);
 
+        accountsAlertHandler = new AccountsAlertHandler(this, AccountsActivity.this, "");
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,6 +81,26 @@ public class AccountsActivity extends AppCompatActivity {
     }
 
     void fetchData(){
+        accountsAlertHandler.show();
+        if(!(new NetworkStatus(this)).isNetworkAvailable()){
+            accountsAlertHandler.hideProgressWithInfo("It seems that you are not connected to Internet!!", 3000);
+            return;
+        }
+        accountsAlertHandler.setTitle("Loading");
+
+        mFirestore.collection("user").document(mAuth.getUid())
+                .collection("data").document("data").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    int size = task.getResult().getLong("size").intValue();
+                    totalPetsTextView.setText(""+size);
+                }else if(!task.isSuccessful() && task.getException() != null){
+                    totalPetsTextView.setText(task.getException().getMessage());
+                }
+            }
+        });
+
         mFirestore.collection("user").document(mAuth.getUid()).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
@@ -83,6 +109,7 @@ public class AccountsActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     user = task.getResult().toObject(User.class);
                     updateUi();
+                    accountsAlertHandler.hideProgressWithInfo("Done", 2000);
                 }
             }
         });
