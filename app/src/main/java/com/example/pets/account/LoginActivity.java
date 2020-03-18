@@ -3,27 +3,19 @@ package com.example.pets.account;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.ActivityOptions;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.example.pets.HomeActivity;
 import com.example.pets.R;
 import com.example.pets.handler.AccountsAlertHandler;
 import com.example.pets.network.NetworkStatus;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.ChasingDots;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -64,8 +56,8 @@ public class LoginActivity extends AppCompatActivity {
         signUpTextView = findViewById(R.id.loginActivity_signUpButton_textView);
         logInButton = findViewById(R.id.loginActivity_loginButton_button);
         infoTextView = findViewById(R.id.loginActivity_introText_textView);
-        passwordEditTextView = findViewById(R.id.signUpActivity_userName_textInputLayout);
-        userNameEditTextView = findViewById(R.id.signUpActivity_name_textInputLayout);
+        passwordEditTextView = findViewById(R.id.signUpActivity_password_textInputLayout);
+        userNameEditTextView = findViewById(R.id.signUpActivity_username_textInputLayout);
 
 
         accountsAlertHandler = new AccountsAlertHandler(this, LoginActivity.this, "");

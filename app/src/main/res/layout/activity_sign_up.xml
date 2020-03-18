@@ -121,7 +121,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signUpActivity_name_textInputLayout"
+        android:id="@+id/signUpActivity_username_textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -142,10 +142,10 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/signUpActivity_userName_textInputLayout"
+        android:id="@+id/signUpActivity_password_textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/signUpActivity_name_textInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/signUpActivity_username_textInputLayout"
         app:layout_constraintStart_toStartOf="parent"
         android:drawableLeft="@drawable/ic_lock_outline_white"
         android:hint="Username/Email"
@@ -170,9 +170,10 @@
         android:layout_marginRight="@dimen/LoginStartMargin"
         android:layout_marginBottom="102dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signUpActivity_password_textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="68dp">
 
 
         <Button

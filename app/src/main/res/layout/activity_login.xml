@@ -35,7 +35,7 @@
         android:transitionName="@string/login_to_signUp_infoText"/>
 
     <EditText
-        android:id="@+id/signUpActivity_name_textInputLayout"
+        android:id="@+id/signUpActivity_username_textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/LoginStartMargin"
@@ -48,11 +48,11 @@
         android:inputType="textEmailAddress"/>
 
     <EditText
-        android:id="@+id/signUpActivity_userName_textInputLayout"
+        android:id="@+id/signUpActivity_password_textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/signUpActivity_name_textInputLayout"
+        app:layout_constraintTop_toBottomOf="@id/signUpActivity_username_textInputLayout"
         app:layout_constraintStart_toStartOf="parent"
         android:drawableLeft="@drawable/ic_lock_outline_white"
         android:hint="Password"
@@ -67,9 +67,10 @@
         android:layout_marginRight="@dimen/LoginStartMargin"
         android:layout_marginBottom="132dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signUpActivity_password_textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="98dp">
 
 
         <Button
