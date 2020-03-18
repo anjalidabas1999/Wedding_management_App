@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        accountsAlertHandler.hideProgressWithInfo("Success", 2000);
+                        accountsAlertHandler.hideProgressWithInfo("Welcome!", 2000);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {

@@ -363,7 +363,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 }).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                accountsAlertHandler.hideProgressWithInfo("Success", 2000);
+                                accountsAlertHandler.hideProgressWithInfo("Welcome!", 2000);
                             }
                         });
 

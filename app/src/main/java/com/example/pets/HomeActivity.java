@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.example.pets.Classes.Pet;
 import com.example.pets.account.LoginActivity;
 import com.example.pets.adapter.PetAdapter;
+import com.example.pets.handler.AccountsAlertHandler;
 import com.example.pets.handler.AlertHandler;
 import com.example.pets.handler.NewPetHandler;
 import com.example.pets.handler.PetDeleteHelperCallback;
@@ -40,6 +41,7 @@ import com.example.pets.interfaces.AlertClickListener;
 import com.example.pets.interfaces.ItemListener;
 import com.example.pets.menu.AccountsActivity;
 import com.example.pets.menu.SettingsActivity;
+import com.example.pets.network.NetworkStatus;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -110,7 +112,7 @@ public class HomeActivity extends AppCompatActivity {
 
     Pet currentPetOpenedInBottomSheet = null;
 
-
+    AccountsAlertHandler accountsAlertHandler;
 
     //firebase objects
     FirebaseFirestore dB;
@@ -181,7 +183,7 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         dB = FirebaseFirestore.getInstance();
 
-
+        accountsAlertHandler = new AccountsAlertHandler(this, HomeActivity.this, "");
 
         //setting recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
@@ -306,8 +308,6 @@ public class HomeActivity extends AppCompatActivity {
         manualNewEntryFab.animate().translationX(0f).setDuration(500).start();
         scanQrCodeFab.animate().translationY(0f).setDuration(500).start();
     }
-
-
 
     void setUpBottomSheet(){
         RelativeLayout bottomSheet = findViewById(R.id.linearLayout);
@@ -767,12 +767,17 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     void updateServerDatabase(String jsonResponse){
+        accountsAlertHandler.show();
+        if(!(new NetworkStatus(this)).isNetworkAvailable()){
+            accountsAlertHandler.hideProgressWithInfo("It seems that you are not connected to Internet!!", 3000);
+            return;
+        }
+
+        accountsAlertHandler.setTitle("Adding ...");
+
         Gson gson = new Gson();
         Pet pet = gson.fromJson(jsonResponse, Pet.class);
-        jsonResponse = gson.toJson(pet);
         DocumentReference reference = dB.collection("user").document(mAuth.getUid());
-
-
 
         reference.collection("data").document("data").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -789,10 +794,10 @@ public class HomeActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(HomeActivity.this, "Data added", Toast.LENGTH_LONG).show();
                                     currentDatabase.update("size", counter + 1);
+                                    accountsAlertHandler.hideProgressWithInfo("Done", 2000);
                                 } else {
-                                    Toast.makeText(HomeActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    accountsAlertHandler.hideProgressWithInfo(task.getException().getMessage(), 5000);
                                 }
                             }
                         });
@@ -802,6 +807,13 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     void fetchDataFromServer(){
+
+        if(!(new NetworkStatus(this)).isNetworkAvailable()){
+            accountsAlertHandler.show();
+            accountsAlertHandler.hideProgressWithInfo("It seems that you are not connected to Internet!!", 4000);
+            return;
+        }
+
         Gson gson = new Gson();
         dB.collection("user").document(mAuth.getUid()).collection("data").document("data")
 
