@@ -87,7 +87,7 @@ public class AccountsAlertHandler {
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(message.equals("Success")){
+                if(message.equals("Success") || message.equals("Welcome!")){
                     dismissWithFinishCall();
                 }else{
                     dismiss();

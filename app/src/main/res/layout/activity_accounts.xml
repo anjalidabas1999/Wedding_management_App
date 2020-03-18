@@ -12,7 +12,7 @@
         android:layout_height="300dp"
         android:scaleType="centerCrop"
         android:src="@drawable/bg6"
-        android:alpha="0.8"/>
+        android:alpha="0.8" />
 
     <RelativeLayout
         android:id="@+id/accountsActivity_bottom_relativeLayout"
@@ -30,7 +30,8 @@
         android:layout_above="@id/accountsActivity_bottom_relativeLayout"
         android:layout_marginLeft="16dp"
         app:civ_border_width="5dp"
-        app:civ_border_color="@color/white"/>
+        app:civ_border_color="@color/white"
+        android:scaleType="centerCrop"/>
 
     <View
         android:layout_width="match_parent"
