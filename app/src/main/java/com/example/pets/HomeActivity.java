@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,10 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -543,7 +548,7 @@ public class HomeActivity extends AppCompatActivity {
     void openDrawer(){
         overLay.setVisibility(View.VISIBLE);
         drawerState = 1;
-        root.animate().scaleX(0.7f).scaleY(0.7f).translationX(300).setInterpolator(new AccelerateInterpolator()).setDuration(500).start();
+        root.animate().scaleX(0.7f).scaleY(0.7f).translationX(300).setInterpolator(new OvershootInterpolator()).setDuration(500).start();
         drawerOpener.animate().rotation(180).setDuration(500).start();
         //animating drawer items
 
@@ -613,7 +618,7 @@ public class HomeActivity extends AppCompatActivity {
     void closeDrawer(){
         overLay.setVisibility(View.GONE);
         drawerState = 0;
-        root.animate().scaleX(1f).scaleY(1f).translationX(0).setInterpolator(new AccelerateInterpolator()).setDuration(500).start();
+        root.animate().scaleX(1f).scaleY(1f).translationX(0).setInterpolator(new AnticipateOvershootInterpolator()).setDuration(500).start();
         drawerOpener.animate().rotation(0).setDuration(500).start();
         //animating drawer items
         final int animDuration = 100;
