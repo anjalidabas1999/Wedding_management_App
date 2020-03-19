@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:background="@color/zxing_transparent"
             android:minWidth="200dp"
-            android:maxWidth="200dp"
+            android:maxWidth="300dp"
             android:text="..."
             android:layout_toRightOf="@id/accountsActivity_nameIcon_imageView"
             android:textAlignment="center"
@@ -147,7 +147,7 @@
             android:textSize="20sp"
             android:enabled="false"
             android:maxLines="1"
-            android:ellipsize="end"/>
+            android:ellipsize="end" />
 
 
     </RelativeLayout>
