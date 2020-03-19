@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/menu_root_relativeLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg6"
-    android:alpha="0.8">
+    >
+
+    <RelativeLayout
+        android:id="@+id/menu_root_relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg6"
+        android:alpha="0.8">
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/menu_accountItem_container_linearLayout"
@@ -90,9 +97,14 @@
 
     </LinearLayout>
 
-
-
-
-
+    <TextView
+        android:id="@+id/menu_goodByeText_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/emoji"
+        android:textSize="32sp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:alpha="0"/>
 
 </RelativeLayout>

@@ -9,5 +9,7 @@
     <string name="login_to_signUp_userName_editText">userName</string>
     <string name="login_to_signUp_password_editText">password</string>
 
+    <string name="emoji">Goodbye!! &#128522;</string>
+
 
 </resources>

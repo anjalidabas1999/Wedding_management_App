@@ -522,9 +522,7 @@ public class HomeActivity extends AppCompatActivity {
         logOutMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAuth.signOut();
-                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-                finish();
+                logOut();
             }
         });
 
@@ -621,6 +619,11 @@ public class HomeActivity extends AppCompatActivity {
         root.animate().scaleX(1f).scaleY(1f).translationX(0).setInterpolator(new AnticipateOvershootInterpolator()).setDuration(500).start();
         drawerOpener.animate().rotation(0).setDuration(500).start();
         //animating drawer items
+       closeAnimateMenuItem();
+
+    }
+
+    void closeAnimateMenuItem(){
         final int animDuration = 100;
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -672,7 +675,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         }).start();
-
 
     }
 
@@ -749,6 +751,56 @@ public class HomeActivity extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
+    }
+
+    void logOut(){
+        TextView goodByeText = findViewById(R.id.menu_goodByeText_textView);
+        closeAnimateMenuItem();
+        root.animate().scaleX(0).scaleY(0).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                goodByeText.setVisibility(View.VISIBLE);
+                goodByeText.animate().alpha(1).setDuration(3000).setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        mAuth.signOut();
+                        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                        finish();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        }).setInterpolator(new AnticipateOvershootInterpolator(
+        )).start();
     }
 
     @Override
