@@ -148,8 +148,6 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Log.d("tag", mName+"______"+mUserName+"_________"+mPassword+"________"+mConfirmPassword);
-
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -166,7 +164,6 @@ public class SignUpActivity extends AppCompatActivity {
             case PROFILE_IMAGE_TAG:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = data.getData();
-                    toast(selectedImage.toString());
 
                     mSelectedImage = selectedImage;
 
@@ -379,12 +376,6 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-
-
-    void toast(String message){
-        Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
-
-    }
 
 
 }

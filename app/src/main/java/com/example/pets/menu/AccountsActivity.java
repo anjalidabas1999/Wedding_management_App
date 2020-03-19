@@ -1,18 +1,25 @@
 package com.example.pets.menu;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pets.Classes.User;
 import com.example.pets.R;
+import com.example.pets.account.SignUpActivity;
 import com.example.pets.handler.AccountsAlertHandler;
+import com.example.pets.handler.AlertHandler;
+import com.example.pets.interfaces.AlertClickListener;
 import com.example.pets.network.NetworkStatus;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +32,10 @@ import com.squareup.picasso.RequestCreator;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountsActivity extends AppCompatActivity {
+
+    final int PROFILE_IMAGE_TAG = 0101;
+
+    int state = 0; // 0: non-editable, 1: editable
 
     ImageButton backButton;
     ImageButton editButton;
@@ -43,6 +54,8 @@ public class AccountsActivity extends AppCompatActivity {
     FirebaseFirestore mFirestore;
 
     User user;
+
+    AlertHandler alertHandler;
 
     AccountsAlertHandler accountsAlertHandler;
 
@@ -64,6 +77,7 @@ public class AccountsActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.accountsActivity_profile_circularImageView);
         totalPetsTextView = findViewById(R.id.accountsActivity_totalPets_textView);
 
+        alertHandler = new AlertHandler(this, AccountsActivity.this, "", null);
         accountsAlertHandler = new AccountsAlertHandler(this, AccountsActivity.this, "");
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +89,13 @@ public class AccountsActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeState();
+            }
+        });
 
         fetchData();
 
@@ -125,6 +146,135 @@ public class AccountsActivity extends AppCompatActivity {
         requestCreator.into(topProfileImageView);
         requestCreator.into(profileImage);
 
+
+    }
+
+    void changeState(){
+        state = state==0 ? 1:0;
+        setState(state);
+    }
+
+    void setState(int st){
+        switch (st){
+            case 0:
+                // settings for state 0
+                setButtonState_0();
+                setEnabledOfEditTexts(false);
+                break;
+            case 1:
+                // setting for state 1
+                setButtonState_1();
+                setEnabledOfEditTexts(true);
+                break;
+
+        }
+    }
+
+    void setButtonState_1(){
+        editButton.animate().rotation(360).setDuration(500).start();
+        editButton.setImageResource(R.drawable.ic_check_white_24dp);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertHandler.setTitle("Are you sure");
+                alertHandler.setAlertClickListener(new AlertClickListener() {
+                    @Override
+                    public void onNegativeClick() {
+                        alertHandler.dismiss();
+                    }
+
+                    @Override
+                    public void onPositiveClick() {
+                        alertHandler.dismiss();
+                        finish();
+                    }
+                });
+                alertHandler.show();
+            }
+        });
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertHandler.setTitle("Save changes");
+                alertHandler.setAlertClickListener(new AlertClickListener() {
+                    @Override
+                    public void onNegativeClick() {
+                        toast("keep editing");
+                        alertHandler.dismiss();
+                    }
+
+                    @Override
+                    public void onPositiveClick() {
+                        alertHandler.hideProgressWithInfo("Done", 1);
+                        toast("Save changes");
+                        changeState();
+                    }
+                });
+                alertHandler.show();
+            }
+        });
+
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sentGalleryIntent();
+            }
+        });
+    }
+
+    void setButtonState_0(){
+        editButton.animate().rotation(0).setDuration(500).start();
+        editButton.setImageResource(R.drawable.ic_edit_white_24dp);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeState();
+            }
+        });
+
+        profileImage.setOnClickListener(null);
+
+    }
+
+
+    void setEnabledOfEditTexts(boolean state){
+        nameEditText.setEnabled(state);
+        usernameEditText.setEnabled(state);
+        passwordEditText.setEnabled(state);
+    }
+
+    void sentGalleryIntent(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"),PROFILE_IMAGE_TAG);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case PROFILE_IMAGE_TAG:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = data.getData();
+                    profileImage.setImageURI(selectedImage);
+                    topProfileImageView.setImageURI(selectedImage);
+                }
+        }
+    }
+
+    void toast(String message){
+        Toast.makeText(AccountsActivity.this, message, Toast.LENGTH_SHORT).show();
 
     }
 

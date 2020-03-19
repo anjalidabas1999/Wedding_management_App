@@ -16,16 +16,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".menu.AccountsActivity"
-            android:theme="@style/NoAppBarTheme_IntroScreen"></activity>
+            android:theme="@style/NoAppBarTheme_IntroScreen"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"></activity>
         <activity
             android:name=".menu.SettingsActivity"
             android:theme="@style/NoAppBarTheme_IntroScreen"></activity>
         <activity
             android:name=".account.SignUpActivity"
-            android:theme="@style/NoAppBarTheme_LoginScreen" />
+            android:theme="@style/NoAppBarTheme_LoginScreen"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".account.LoginActivity"
-            android:theme="@style/NoAppBarTheme_LoginScreen" />
+            android:theme="@style/NoAppBarTheme_LoginScreen"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/NoAppBarTheme_IntroScreen">
