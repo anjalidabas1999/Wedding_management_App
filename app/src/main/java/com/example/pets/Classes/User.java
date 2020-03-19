@@ -1,5 +1,7 @@
 package com.example.pets.Classes;
 
+import androidx.annotation.Nullable;
+
 public class User {
 
     String name;
@@ -53,5 +55,16 @@ public class User {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(this.getUsername().equals(((User) obj).getUsername()) &&
+                this.getName().equals(((User) obj).getName()) &&
+                this.getPassword().equals(((User) obj).getPassword())
+        ){
+            return true;
+        }
+        return false;
     }
 }

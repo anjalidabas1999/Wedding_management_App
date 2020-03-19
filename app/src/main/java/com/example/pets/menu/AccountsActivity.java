@@ -20,12 +20,21 @@ import com.example.pets.account.SignUpActivity;
 import com.example.pets.handler.AccountsAlertHandler;
 import com.example.pets.handler.AlertHandler;
 import com.example.pets.interfaces.AlertClickListener;
+import com.example.pets.interfaces.FirebaseTasksCallbacks;
 import com.example.pets.network.NetworkStatus;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
@@ -58,6 +67,9 @@ public class AccountsActivity extends AppCompatActivity {
     AlertHandler alertHandler;
 
     AccountsAlertHandler accountsAlertHandler;
+
+    Uri mNewImage;
+    User mNewUser;
 
     @Override
     protected void
@@ -99,41 +111,6 @@ public class AccountsActivity extends AppCompatActivity {
 
         fetchData();
 
-    }
-
-    void fetchData(){
-        accountsAlertHandler.show();
-        if(!(new NetworkStatus(this)).isNetworkAvailable()){
-            accountsAlertHandler.hideProgressWithInfo("It seems that you are not connected to Internet!!", 3000);
-            return;
-        }
-        accountsAlertHandler.setTitle("Loading");
-
-        mFirestore.collection("user").document(mAuth.getUid())
-                .collection("data").document("data").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    int size = task.getResult().getLong("size").intValue();
-                    totalPetsTextView.setText(""+size);
-                }else if(!task.isSuccessful() && task.getException() != null){
-                    totalPetsTextView.setText(task.getException().getMessage());
-                }
-            }
-        });
-
-        mFirestore.collection("user").document(mAuth.getUid()).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    user = task.getResult().toObject(User.class);
-                    updateUi();
-                    accountsAlertHandler.hideProgressWithInfo("Done", 2000);
-                }
-            }
-        });
     }
 
     void updateUi(){
@@ -207,8 +184,7 @@ public class AccountsActivity extends AppCompatActivity {
 
                     @Override
                     public void onPositiveClick() {
-                        alertHandler.hideProgressWithInfo("Done", 1);
-                        toast("Save changes");
+                        updateProfile();
                         changeState();
                     }
                 });
@@ -246,10 +222,8 @@ public class AccountsActivity extends AppCompatActivity {
 
     }
 
-
     void setEnabledOfEditTexts(boolean state){
         nameEditText.setEnabled(state);
-        usernameEditText.setEnabled(state);
         passwordEditText.setEnabled(state);
     }
 
@@ -266,11 +240,253 @@ public class AccountsActivity extends AppCompatActivity {
         switch (requestCode){
             case PROFILE_IMAGE_TAG:
                 if(resultCode == RESULT_OK){
-                    Uri selectedImage = data.getData();
-                    profileImage.setImageURI(selectedImage);
-                    topProfileImageView.setImageURI(selectedImage);
+                    mNewImage = data.getData();
+                    profileImage.setImageURI(mNewImage);
+                    topProfileImageView.setImageURI(mNewImage);
                 }
         }
+    }
+
+    void updateProfile(){
+        alertHandler.showProgress();
+        mNewUser = new User();
+        mNewUser.setName(nameEditText.getText().toString().trim());
+        mNewUser.setUsername(usernameEditText.getText().toString().trim());
+        mNewUser.setPassword(passwordEditText.getText().toString().trim());
+
+        if(user.equals(mNewUser)){
+            alertHandler.hideProgressWithInfo("No change", 1);
+            return;
+        }
+
+
+
+        if(!user.getPassword().equals(mNewUser.getPassword())){
+            // In this case password is changed
+            // updating password
+            updatePassword(mNewUser.getUsername(), mNewUser.getPassword(), new FirebaseTasksCallbacks() {
+                @Override
+                public void onSuccess(Uri result) {
+                    alertHandler.setTitle("Password updated");
+                    // checking if profileImage is changed or not
+                    if(mNewImage != null){
+                        // In this case both password and profileImage is changed
+                        // updating profile image
+                        updateProfileImage(mNewImage, new FirebaseTasksCallbacks() {
+                            @Override
+                            public void onSuccess(Uri result) {
+                                alertHandler.setTitle("Profile image updated");
+                                mNewUser.setImage(result.toString());
+                                // updating database
+                                updateCompleteDatabase(new FirebaseTasksCallbacks() {
+                                    @Override
+                                    public void onSuccess(Uri result) {
+                                        alertHandler.hideProgressWithInfo("Updated", 1);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        alertHandler.hideProgressWithInfo(e.getMessage(), 0);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                alertHandler.hideProgressWithInfo(e.getMessage(), 0);
+                            }
+                        });
+                    }else{
+                        // In this case password is changed but not profileImage
+                        // updating database
+                        mNewUser.setImage(user.getImage());
+                        updateCompleteDatabase(new FirebaseTasksCallbacks() {
+                            @Override
+                            public void onSuccess(Uri result) {
+                                alertHandler.hideProgressWithInfo("Updated", 1);
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                alertHandler.hideProgressWithInfo(e.getMessage(), 0);
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    alertHandler.hideProgressWithInfo(e.getMessage(), 0);
+                }
+            });
+        }else if(mNewImage != null){
+            // In this case password is not changed but profileImage is changed
+            // uploading profile image after checking if it is changed
+            updateProfileImage(mNewImage, new FirebaseTasksCallbacks() {
+                @Override
+                public void onSuccess(Uri result) {
+                    alertHandler.setTitle("Profile image updated");
+                    mNewUser.setImage(result.toString());
+                    // updating database
+                    updateCompleteDatabase(new FirebaseTasksCallbacks() {
+                        @Override
+                        public void onSuccess(Uri result) {
+                            alertHandler.hideProgressWithInfo("Updated", 1);
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            alertHandler.hideProgressWithInfo(e.getMessage(), 0);
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    alertHandler.hideProgressWithInfo(e.getMessage(), 0);
+                }
+            });
+        }else{
+            // In this case neither password nor image is changed
+            // updating database
+            mNewUser.setImage(user.getImage());
+            updateCompleteDatabase(new FirebaseTasksCallbacks() {
+                @Override
+                public void onSuccess(Uri result) {
+                    alertHandler.hideProgressWithInfo("Updated", 1);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    alertHandler.hideProgressWithInfo(e.getMessage(), 0);
+                }
+            });
+            /*updateDatabaseField("name", mNewUser.getName(), new FirebaseTasksCallbacks() {
+                @Override
+                public void onSuccess(Uri result) {
+                    alertHandler.hideProgressWithInfo("Updated", 1);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    alertHandler.hideProgressWithInfo(e.getMessage(), 0);
+                }
+            });*/
+        }
+
+
+    }
+
+    void updatePassword(String userName, String password, FirebaseTasksCallbacks firebaseTasksCallbacks){
+        alertHandler.setTitle("Updating password..");
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        AuthCredential credential = EmailAuthProvider.getCredential(userName, password);
+
+        /*firebaseUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    firebaseTasksCallbacks.onSuccess(null);
+                }else{
+                    firebaseTasksCallbacks.onFailure(task.getException());
+                }
+            }
+        });*/
+
+        firebaseUser.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    firebaseTasksCallbacks.onSuccess(null);
+                }else{
+                    firebaseTasksCallbacks.onFailure(task.getException());
+                }
+            }
+        });
+    }
+
+
+    void updateProfileImage(Uri imageUri, FirebaseTasksCallbacks firebaseTasksCallbacks){
+        alertHandler.setTitle("Updating profile image...");
+        StorageReference mRef = FirebaseStorage.getInstance().getReference().child("user/"+mAuth.getUid()+".jpeg");
+        mRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if(task.isSuccessful()){
+                    mRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            firebaseTasksCallbacks.onSuccess(uri);
+                        }
+                    });
+
+                }else{
+                    firebaseTasksCallbacks.onFailure(task.getException());
+                }
+            }
+        });
+    }
+
+    void updateCompleteDatabase(FirebaseTasksCallbacks firebaseTasksCallbacks){
+        mFirestore.collection("user").document(mAuth.getUid()).set(mNewUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    firebaseTasksCallbacks.onSuccess(null);
+                }else {
+                    firebaseTasksCallbacks.onFailure(task.getException());
+                }
+            }
+        });
+
+    }
+
+    void updateDatabaseField(String field, String value, FirebaseTasksCallbacks firebaseTasksCallbacks){
+        mFirestore.collection("user").document(mAuth.getUid()).update(field, value).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    firebaseTasksCallbacks.onSuccess(null);
+                }else{
+                    firebaseTasksCallbacks.onFailure(task.getException());
+                }
+            }
+        });
+    }
+
+    void fetchData(){
+        accountsAlertHandler.show();
+        if(!(new NetworkStatus(this)).isNetworkAvailable()){
+            accountsAlertHandler.hideProgressWithInfo("It seems that you are not connected to Internet!!", 3000);
+            return;
+        }
+        accountsAlertHandler.setTitle("Loading");
+
+        mFirestore.collection("user").document(mAuth.getUid())
+                .collection("data").document("data").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    int size = task.getResult().getLong("size").intValue();
+                    totalPetsTextView.setText(""+size);
+                }else if(!task.isSuccessful() && task.getException() != null){
+                    totalPetsTextView.setText(task.getException().getMessage());
+                }
+            }
+        });
+
+        mFirestore.collection("user").document(mAuth.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            user = task.getResult().toObject(User.class);
+                            updateUi();
+                            accountsAlertHandler.hideProgressWithInfo("Done", 2000);
+                        }
+                    }
+                });
     }
 
     void toast(String message){
