@@ -46,8 +46,6 @@ public class NewPetHandler {
 
     AlertHandler alertHandler;
 
-    View confirmDialogLayout;
-
     FirebaseFirestore mFirestore;
 
     public NewPetHandler(Context context, Activity activity) {
@@ -69,7 +67,6 @@ public class NewPetHandler {
         previousButton = dialog.findViewById(R.id.newPetEntry_previous_imageButton);
         cancelButton = dialog.findViewById(R.id.newPetEntry_cancel_imageButton);
         nextButton = dialog.findViewById(R.id.newPetEntry_next_imageButton);
-        confirmDialogLayout = dialog.findViewById(R.id.newPetEntry_confirmDialog_include);
 
         previousButton.setVisibility(View.GONE);
 
