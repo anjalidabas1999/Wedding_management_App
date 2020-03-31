@@ -9,7 +9,14 @@ This an android app for those who has to manage pets data.
 
 
 # Screenshots
-![Feature 1](/images/signUp.png)
-![Feature 1](images/main.png)
-![Feature 1](images/menu.png)
-![Feature 1](images/share.png)
+<img src="https://raw.githubusercontent.com/danishjamal104/Pets/master/images/signUp.png"
+width="200" height="375">
+<img src="https://raw.githubusercontent.com/danishjamal104/Pets/master/images/main.png"
+width="200" height="375">
+<img src="https://raw.githubusercontent.com/danishjamal104/Pets/master/images/bottomSheet.png"
+width="200" height="375">
+<img src="https://raw.githubusercontent.com/danishjamal104/Pets/master/images/menu.png"
+width="200" height="375">
+<img src="https://raw.githubusercontent.com/danishjamal104/Pets/master/images/share.png"
+width="200" height="375">
+
