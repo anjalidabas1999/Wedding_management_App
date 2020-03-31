@@ -20,3 +20,13 @@ width="200" height="375">
 <img src="https://raw.githubusercontent.com/danishjamal104/Pets/master/images/share.png"
 width="200" height="375">
 
+# Try App
+
+ ## Scan qr
+ <img src="https://raw.githubusercontent.com/danishjamal104/Pets/master/images/qr.png"
+width="100" height="100"> 
+
+___
+
+## Or get apk
+[Download here](https://i.diawi.com/3B3vWx)
