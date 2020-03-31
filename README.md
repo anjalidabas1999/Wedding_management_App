@@ -24,7 +24,7 @@ width="200" height="375">
 
  ## Scan qr
  <img src="https://raw.githubusercontent.com/danishjamal104/Pets/master/images/qr.png"
-width="100" height="100"> 
+width="200" height="200"> 
 
 ___
 
