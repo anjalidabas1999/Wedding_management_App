@@ -29,4 +29,4 @@ width="200" height="200">
 ___
 
 ## Or get apk
-[Download here](https://i.diawi.com/3B3vWx)
+[Download here](https://raw.githubusercontent.com/danishjamal104/Pets/master/Apk/app-release.apk)
